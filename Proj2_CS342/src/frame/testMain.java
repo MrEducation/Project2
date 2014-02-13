@@ -35,7 +35,7 @@ public class testMain extends JFrame implements ActionListener{
 		msBoard.setBounds(0, 0, buttonSize * sideCount, buttonSize * sideCount);
 		for(int i = 0; i < numBlocks; i++){
 			aButton = new JButton("" + i);
-			aButton.setLocation((buttonSize + 3) * (i % sideCount), (buttonSize + 3) * (i / sideCount));
+			aButton.setLocation(1 + (buttonSize + 1) * (i % sideCount), 1 + (buttonSize + 1) * (i / sideCount));
 			aButton.setSize(buttonSize, buttonSize);
 			//aButton.setBorder(null);
 			aButton.setMargin(new Insets(0, 0, 0, 0));
@@ -43,8 +43,9 @@ public class testMain extends JFrame implements ActionListener{
 			msBoard.add(aButton);
 			this.add(msBoard);
 		}
+		
 		//Insets insets = this.getInsets();
-		this.setSize(sideCount * (buttonSize + 5), sideCount * (buttonSize + 5));
+		this.setSize(sideCount * (buttonSize + 3), (sideCount + 1) * (buttonSize + 3));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//do a system.exit at end, i believe
 	}
 
