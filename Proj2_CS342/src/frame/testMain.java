@@ -2,8 +2,6 @@ package frame;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.*;
 
@@ -35,16 +33,22 @@ public class testMain extends JFrame implements ActionListener{
 		msBoard.setBounds(0, 0, buttonSize * sideCount, buttonSize * sideCount);
 		for(int i = 0; i < numBlocks; i++){
 			aButton = new JButton("" + i);
-			aButton.setLocation(1 + (buttonSize + 1) * (i % sideCount), 1 + (buttonSize + 1) * (i / sideCount));
+			int xLoc = 1 + (buttonSize + 1) * (i % sideCount);
+			int yLoc = 1 + (buttonSize + 1) * (i / sideCount);
+			aButton.setLocation(xLoc, yLoc);
 			aButton.setSize(buttonSize, buttonSize);
 			//aButton.setBorder(null);
-			aButton.setMargin(new Insets(0, 0, 0, 0));
+			//aButton.setMargin(new Insets(0, 0, 0, 0));
+			aButton.setMargin(new Insets(5, 5, 5, 5));
+			//aButton.setMargin(m);
 			//aButton.setBounds(aButton.getBounds());
 			msBoard.add(aButton);
 			this.add(msBoard);
 		}
 		
-		//Insets insets = this.getInsets();
+		Insets ins = this.getInsets();
+		System.out.println(ins);
+		//this.setSize(ins.left + ins.right, ins.top + ins.bottom);
 		this.setSize(sideCount * (buttonSize + 3), (sideCount + 1) * (buttonSize + 3));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//do a system.exit at end, i believe
 	}
