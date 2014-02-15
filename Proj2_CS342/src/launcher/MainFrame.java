@@ -39,8 +39,6 @@ public class MainFrame extends JFrame{
 		this.add(new JMinesSweeperBoardPanel());
 		this.pack();
 		this.setVisible(true);
-		
-		
 	}
 	
 	//member method
@@ -69,7 +67,6 @@ public class MainFrame extends JFrame{
 
 	public static void main(String args[])
 	{
-		new MinesGame(10, 10, 10);// to be intergrated latter
 		new MainFrame("Mine Sweeper");
 	}
 }
