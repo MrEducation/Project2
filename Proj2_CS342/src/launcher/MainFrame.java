@@ -25,7 +25,6 @@ public class MainFrame extends JFrame{
 		super(title);
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.pack();
 		
 		//frame Icon
 		MediaTracker tracker = new MediaTracker(this);
