@@ -1,4 +1,4 @@
-package frame;
+package launcher;
 
 import java.awt.Dimension;
 import java.awt.Insets;
