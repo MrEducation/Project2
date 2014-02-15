@@ -1,8 +1,10 @@
 package launcher;
 
 import java.io.*;
+import java.net.URL;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 
@@ -28,7 +30,8 @@ public class MainFrame extends JFrame{
 		
 		//frame Icon
 		MediaTracker tracker = new MediaTracker(this);
-		Image img = Toolkit.getDefaultToolkit().getImage("reset.gif");
+		URL temp = MainFrame.class.getClassLoader().getResource("images/reset.gif");//top left image
+		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		tracker.addImage(img, 0);
 		setIconImage(img);
 		this.add(new JMinesSweeperBoardPanel());
