@@ -2,21 +2,20 @@ package launcher;
 
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import logic.MinesGame;
 
-public class JMinesSweeperBoardPanel extends JPanel  implements ActionListener{
+public class JMinesSweeperBoardPanel extends JPanel {
 	private final int numRows, numCols;
 	private final int numBombs;
 	private final int buttonSize;
 	private final int pixSpacing;
 	private final int pWidth, pHeight;
 	private JButton board[][];
+	private KeyHandler mouseListener;
 	
 	private static class MineButton extends JButton{
 		private static MinesGame theGame;
@@ -46,6 +45,7 @@ public class JMinesSweeperBoardPanel extends JPanel  implements ActionListener{
 		pixSpacing = 1; // zero or greater
 		pWidth = (buttonSize + pixSpacing) * numCols + pixSpacing;
 		pHeight = (buttonSize + pixSpacing) * numRows + pixSpacing;
+		mouseListener = new KeyHandler();
 		board = new JButton[numCols][numRows];// (x, y)
 		MineButton.setGame(new MinesGame(numRows, numCols, numBombs));
 		this.setLayout(null);
@@ -61,7 +61,7 @@ public class JMinesSweeperBoardPanel extends JPanel  implements ActionListener{
 			for(int x = 0; x < numCols; x++){
 				//aButton = new JButton("(" + y + ", " + x + ")");
 				aButton = new MineButton(x, y);
-				aButton.addActionListener(this);
+				aButton.addMouseListener(mouseListener);
 				xLoc = pixSpacing + (buttonSize + pixSpacing) * x;
 				aButton.setLocation(xLoc, yLoc); // relative location to msBoardPanel
 				aButton.setSize(buttonSize, buttonSize);
@@ -71,11 +71,4 @@ public class JMinesSweeperBoardPanel extends JPanel  implements ActionListener{
 			}
 		}
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		MineButton temp = (MineButton) e.getSource();
-		System.out.println(temp.getValue());
-	}
-
 }
