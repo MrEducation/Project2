@@ -14,7 +14,7 @@ public class MinesGame {
 		grid = new int[numCols][numRows];// initializes to zeros
 		bombValue = 9;// 9 allows aligned print
 		genBoard();
-		printBoard();
+		//printBoard();
 	}
 
 	/**
