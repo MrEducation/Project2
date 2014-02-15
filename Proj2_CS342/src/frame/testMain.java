@@ -7,11 +7,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class testMain extends JFrame implements ActionListener{
+public class testMain extends JFrame{
 	
 	public static void main(String args[]){
 		testMain temp = new testMain();
-		temp.pack();
+		//temp.pack();
 		temp.setVisible(true);
 	}
 	
@@ -23,6 +23,10 @@ public class testMain extends JFrame implements ActionListener{
 		temp.add(menu);
 		menu.add(new JMenuItem("A text-only menu item", KeyEvent.VK_T));
 		this.add(temp, BorderLayout.PAGE_START);
+		
+		JMinesSweeperBoardPanel mB = new JMinesSweeperBoardPanel();
+		this.add(mB);
+		/*
 		JPanel msBoard = new JPanel();
 		msBoard.setLayout(null);//for custom layout
 		JButton aButton;
@@ -36,28 +40,19 @@ public class testMain extends JFrame implements ActionListener{
 			aButton = new JButton("" + i);
 			int xLoc = 1 + (buttonSize + 1) * (i % sideCount);
 			int yLoc = 1 + (buttonSize + 1) * (i / sideCount);
-			aButton.setLocation(xLoc, yLoc);
+			aButton.setLocation(xLoc, yLoc); // relative location to msBoardPanel
 			aButton.setSize(buttonSize, buttonSize);
-			//aButton.setBorder(null);
-			//aButton.setMargin(new Insets(0, 0, 0, 0));
-			aButton.setMargin(new Insets(5, 5, 5, 5));
-			//aButton.setMargin(m);
-			//aButton.setBounds(aButton.getBounds());
+			aButton.setMargin(new Insets(5, 5, 5, 5));// centers text
 			msBoard.add(aButton);
-			this.add(msBoard);
 		}
+		this.add(msBoard);
+		*/
 		
-		Insets ins = this.getInsets();
-		System.out.println(ins);
+		//Insets ins = this.getInsets();
+		//System.out.println(ins);
 		//this.setSize(ins.left + ins.right, ins.top + ins.bottom);
 		//this.setSize(sideCount * (buttonSize + 3), (sideCount + 1) * (buttonSize + 3));
-		//this.pack();
+		this.pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//do a system.exit at end, i believe
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 }
