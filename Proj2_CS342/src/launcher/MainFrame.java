@@ -32,6 +32,8 @@ public class MainFrame extends JFrame{
 		Image img = Toolkit.getDefaultToolkit().getImage("reset.gif");
 		tracker.addImage(img, 0);
 		setIconImage(img);
+		this.add(new JMinesSweeperBoardPanel());
+		this.pack();
 		this.setVisible(true);
 		
 		
@@ -60,9 +62,7 @@ public class MainFrame extends JFrame{
 		
 		this.setJMenuBar(menuBar);
 	}
-	
-	
-	
+
 	public static void main(String args[])
 	{
 		new MainFrame("Mine Sweeper");
