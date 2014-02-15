@@ -7,6 +7,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import logic.MinesGame;
+
 
 public class MainFrame extends JFrame{
 	
@@ -67,6 +69,7 @@ public class MainFrame extends JFrame{
 
 	public static void main(String args[])
 	{
+		new MinesGame(10, 10, 10);// to be intergrated latter
 		new MainFrame("Mine Sweeper");
 	}
 }
