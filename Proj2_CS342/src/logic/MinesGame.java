@@ -5,6 +5,7 @@ import java.util.Random;
 public class MinesGame {
 	private int numCols, numRows, numBombs;
 	private int grid[][];
+	int xForBombs[], yForBombs[];
 	private final int bombValue;
 
 	public MinesGame(int cols, int rows, int bombs) {
@@ -14,7 +15,7 @@ public class MinesGame {
 		grid = new int[numCols][numRows];// initializes to zeros
 		bombValue = 9;// 9 allows aligned print
 		genBoard();
-		//printBoard();
+		printBoard();
 	}
 
 	/**
@@ -29,8 +30,8 @@ public class MinesGame {
 	}
 
 	private void genBoard() {
-		int xForBombs[] = new int[numBombs];
-		int yForBombs[] = new int[numBombs];
+		xForBombs = new int[numBombs];
+		yForBombs  = new int[numBombs];
 		Random temp = new Random();
 		for (int i = 0; i < numBombs; ++i) {
 			xForBombs[i] = temp.nextInt(numBombs);

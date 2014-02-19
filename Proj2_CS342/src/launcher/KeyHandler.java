@@ -10,6 +10,8 @@ public class KeyHandler extends MouseAdapter {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {//combination of press release
+		MineButton temp = (MineButton)e.getSource();
+		System.out.println("The vlaue under the button: " + temp.getValue());
 		if (e.getButton() == MouseEvent.BUTTON1){
 			System.out.println("Left, clicked");
 		}

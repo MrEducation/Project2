@@ -17,25 +17,6 @@ public class JMinesSweeperBoardPanel extends JPanel {
 	private JButton board[][];
 	private KeyHandler mouseListener;
 	
-	private static class MineButton extends JButton{
-		private static MinesGame theGame;
-		private final int xPos, yPos;
-		
-		public MineButton (int x, int y){
-			super();
-			xPos = x;
-			yPos = y;
-		}
-		
-		public static void setGame(MinesGame temp){
-			theGame = temp;
-		}
-		
-		public int getValue(){
-			return theGame.getValue(xPos, yPos);
-		}
-	}
-	
 	public JMinesSweeperBoardPanel(){
 		super();
 		numRows = 10;
