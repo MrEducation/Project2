@@ -24,6 +24,8 @@ public class MainFrame extends JFrame{
 	private JMenuItem aboutItem = null;
 	
 	private String endString = "Do you want to quit the Game?";
+	private String helpString = "Help?"; 
+	private String infoString = "CS342 Project 2";
 	
 	public MainFrame(String title){
 		super(title);
@@ -39,7 +41,49 @@ public class MainFrame extends JFrame{
 		this.add(new JMinesSweeperBoardPanel());
 		this.pack();
 		this.setVisible(true);
+		
 	}
+	
+	/* [ActionListener] */
+	class newActionListener implements ActionListener {//when choose "Reset" on the menuBar
+		public void actionPerformed(ActionEvent e){
+			resetGame(); 
+		}
+	}
+	
+	class bectTimeActionListener implements ActionListener { //for TopTen
+		public void actionPerformed(ActionEvent e){
+			//will do later
+		}
+	}
+	
+	class exitActionListener implements ActionListener { //for exit menu
+		public void actionPerformed(ActionEvent e){
+			int val;
+			val = JOptionPane.showConfirmDialog(MainFrame.this,endString, "Game End",
+						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(val == JOptionPane.YES_OPTION) System.exit(0);
+		}
+	}
+	
+	class dialogActionListener implements ActionListener{ 
+		public void actionPerformed(ActionEvent e){
+			if(e.getSource() == helpItem)
+				JOptionPane.showMessageDialog(MainFrame.this, helpString,"Help", JOptionPane.INFORMATION_MESSAGE);
+			else if(e.getSource() == aboutItem)
+				JOptionPane.showMessageDialog(MainFrame.this, infoString, "Information", JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
+	
+	public void resetGame(){
+		//remove game
+		//set new game
+		this.pack();
+		this.setVisible(true);
+	}
+
+	
 	
 	//member method
 	public void initMenu(){
@@ -52,6 +96,8 @@ public class MainFrame extends JFrame{
 		helpItem = new JMenuItem("Help");
 		aboutItem = new JMenuItem("About");
 		
+		exitItem.addActionListener(new exitActionListener());
+		
 		menuGame.add(resetItem);
 		menuGame.add(toptenItem);
 		menuGame.add(exitItem);
@@ -61,10 +107,15 @@ public class MainFrame extends JFrame{
 		menuBar.add(menuGame);
 		menuBar.add(menuHelp);
 		
+		//toptenItem.addActionListener(new toptenActionListener());
+		//resetItem.addActionListener(new resetActionListener());
+		aboutItem.addActionListener(new dialogActionListener());
+		helpItem.addActionListener(new dialogActionListener());
 		
 		this.setJMenuBar(menuBar);
 	}
 
+	
 	public static void main(String args[])
 	{
 		new MainFrame("Mine Sweeper");
