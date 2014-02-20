@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 import logic.MinesGame;
 
@@ -38,6 +39,12 @@ public class MainFrame extends JFrame{
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		tracker.addImage(img, 0);
 		setIconImage(img);
+		
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		this.add(new JMinesSweeperBoardPanel());
 		this.pack();
 		this.setResizable(false);
