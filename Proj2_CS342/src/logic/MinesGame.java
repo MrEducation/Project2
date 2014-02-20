@@ -12,7 +12,8 @@ public class MinesGame {
 	int xForBombs[], yForBombs[];
 	private final int bombValue;
 
-	public MinesGame(int cols, int rows, int bombs, JMinesSweeperBoardPanel daGUI) {
+	public MinesGame(int cols, int rows, int bombs,
+			JMinesSweeperBoardPanel daGUI) {
 		theGUI = daGUI;
 		numCols = cols;
 		numRows = rows;
@@ -28,47 +29,52 @@ public class MinesGame {
 	/**
 	 * (0,0) in the top left, y ascends down
 	 * 
-	 * @param x The column
-	 * @param y The row
+	 * @param x
+	 *            The column
+	 * @param y
+	 *            The row
 	 * @return
 	 */
-	public int getValue(int x, int y){
+	public int getValue(int x, int y) {
 		return ansGrid[x][y];
 	}
-	
-	public static final int getBombValue(){
+
+	public static final int getBombValue() {
 		return 9;
 	}
-	
+
 	/**
 	 * Returns if you lose
 	 * 
-	 * @param x xPos
-	 * @param y yPos
+	 * @param x
+	 *            xPos
+	 * @param y
+	 *            yPos
 	 * @return value at position
 	 */
-	public int openSpot(int x, int y){
+	public int openSpot(int x, int y) {
 		usrGrid[x][y] = true;
 		theGUI.openSpot(x, y, ansGrid[x][y]);
-		if (ansGrid[x][y] == 9){
+		if (ansGrid[x][y] == 9) {
 			openBombs();
 			return getBombValue();
 		}
-		if (ansGrid[x][y] == 0){
+		if (ansGrid[x][y] == 0) {
 			openSurrounding(x, y);
 		}
 		return ansGrid[x][y];
 	}
-	
-	private void openBombs(){
-		for (int i = 0; i < numBombs; ++i){
-			theGUI.openSpot(xForBombs[i], yForBombs[i], ansGrid[xForBombs[i]][yForBombs[i]]);
+
+	private void openBombs() {
+		for (int i = 0; i < numBombs; ++i) {
+			theGUI.openSpot(xForBombs[i], yForBombs[i],
+					ansGrid[xForBombs[i]][yForBombs[i]]);
 		}
 	}
 
 	private void genBoard() {
 		xForBombs = new int[numBombs];
-		yForBombs  = new int[numBombs];
+		yForBombs = new int[numBombs];
 		Random temp = new Random();
 		for (int i = 0; i < numBombs; ++i) {
 			xForBombs[i] = temp.nextInt(numBombs);
@@ -76,7 +82,8 @@ public class MinesGame {
 		}
 		for (int i = 0; i < numBombs; ++i) {
 
-			ansGrid[xForBombs[i]][yForBombs[i]] = bombValue;// bombs are negative 1
+			ansGrid[xForBombs[i]][yForBombs[i]] = bombValue;// bombs are
+															// negative 1
 			setSurrounding(xForBombs[i], yForBombs[i]);
 		}
 	}
@@ -99,7 +106,7 @@ public class MinesGame {
 			return false;
 		return true;
 	}
-	
+
 	private void openSurrounding(int x, int y) {
 		// checks out of bounds
 		if (isValid(x - 1, y - 1)) {// top left

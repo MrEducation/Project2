@@ -19,12 +19,6 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	private MineButton board[][];
 	private KeyHandler mouseListener;
 	
-	/*imgIcon field*/
-	private ImageIcon[] numImgList = null;
-	private ImageIcon[] mineImgList = null;
-	private ImageIcon 	closeImg	= null;
-	private ImageIcon	flagImg 	= null;
-	private ImageIcon	pressedImg 	= null;
 	
 	
 	public JMinesSweeperBoardPanel(){
@@ -63,29 +57,8 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	}
 	
 	public void openSpot(int x, int y, int val){
-		if (val == MinesGame.getBombValue())
-			board[x][y].chooseIcon();
+		board[x][y].chooseIcon();
 		board[x][y].getModel().setPressed(true);
 		board[x][y].getModel().setEnabled(false);
 	}
-	
-	
-	/*image loading method*/
-	public void setImg(){
-		numImgList = new ImageIcon[7];
-		for(int i=0; i<7; i++)
-			numImgList[i] = new ImageIcon("img/"+(i+1)+"s.gif");
-		
-		mineImgList = new ImageIcon[2];
-		for(int i=0; i<2; i++)
-			mineImgList[i] = new ImageIcon("img/"+(i+1)+".gif");
-		
-		closeImg = new ImageIcon("img/close.gif");
-		flagImg = new ImageIcon("img/flag.gif");
-		pressedImg = new ImageIcon("img/pressed.gif");
-	}
-
-	
-		
-	
 }

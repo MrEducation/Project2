@@ -14,27 +14,30 @@ import logic.MinesGame;
 
 public class MineButton extends JButton{
 	private static MinesGame theGame;
-	//top left image
-	private static final ClassLoader temp =	MineButton.class.getClassLoader();
-	private static final Image Flag = Toolkit.getDefaultToolkit().getImage(
-			temp.getResource("images/flag.GIF"));;
-	private static final Image Bomb = Toolkit.getDefaultToolkit().getImage(
-			temp.getResource("images/mine1.gif"));
-	private static final Image Question = Toolkit.getDefaultToolkit().getImage(
-			temp.getResource("images/wildcard.gif"));
-	private static final Image imgs[] = {Bomb, Flag, Question};
-	private int imgNum;
+
+	/*imgIcon field*/
+	private static Image allImgs[] = new Image[10];
+	
+	private static boolean imgsIsSet = false, hasSetIcon = false;
+	private static ImageIcon[] numImgList = null;
+	private static ImageIcon[] mineImgList = null;
+	private static ImageIcon	flagImg 	= null;
+	
+	private int imgIndex;
 	private final int xPos, yPos;
 
 	public MineButton(int x, int y) {
 		super();
-		imgNum = -1;
+		imgIndex = -1;
 		xPos = x;
 		yPos = y;
+		if (!imgsIsSet)
+			setImg();
 	}
 	
 	public void open(){
 		theGame.openSpot(xPos, yPos);
+		chooseIcon();
 	}
 
 	public static void setGame(MinesGame temp) {
@@ -42,20 +45,49 @@ public class MineButton extends JButton{
 	}
 	
 	public void chooseIcon(){// should be called on click (or pressed)
-		if (getValue() == MinesGame.getBombValue()){
-			this.setPressedIcon(new ImageIcon(Bomb));//idk why dis doesn't work
-			imgNum = 0;
-		}
+		imgIndex = getValue();// for now
+		//this.setPressedIcon(mineImgList[imgIndex]);//idk why dis doesn't work
+		
+		hasSetIcon = true;
 	}
 	
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
-		if (imgNum >= 0)
-			g.drawImage(Bomb, 0, 0, this);
+		if (!hasSetIcon || imgIndex < 1)
+			return;
+		int x = this.getPreferredSize().width / 2 - allImgs[imgIndex].getWidth(this) / 2;
+		int y = this.getPreferredSize().height / 2 - allImgs[imgIndex].getHeight(this) / 2;
+		if (imgIndex > 0)
+			g.drawImage(allImgs[imgIndex], x, y, this);
 	}
 	
 	public int getValue() {
 		return theGame.getValue(xPos, yPos);
+	}	
+	
+	/*image loading method*/
+	private static void setImg(){
+		ClassLoader temp =	MineButton.class.getClassLoader();
+		numImgList = new ImageIcon[8];
+		
+		for(int i=1; i<8; i++){
+			numImgList[i] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+					temp.getResource("images/"+ i +"s.gif")));
+			allImgs[i] = numImgList[i].getImage();
+		}
+		
+		mineImgList = new ImageIcon[2];
+		
+		mineImgList[0] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				temp.getResource("images/mine1.gif")));
+		mineImgList[1] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				temp.getResource("images/mine2.gif")));
+		System.out.println(mineImgList[0]);
+		
+		allImgs[9] = mineImgList[0].getImage(); 
+		
+		flagImg = new ImageIcon("images/flag.gif");
+		imgsIsSet = true;
 	}
 }
