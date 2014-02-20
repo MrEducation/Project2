@@ -68,7 +68,7 @@ public class JMinesSweeperBoardPanel extends JPanel {
 			numImgList[i] = new ImageIcon("img/"+(i+1)+"s.gif");
 		
 		mineImgList = new ImageIcon[2];
-		for(int i=0; i<2; i++)
+		for(int i=0; i<2; i++)//
 			mineImgList[i] = new ImageIcon("img/"+(i+1)+".gif");
 		
 		closeImg = new ImageIcon("img/close.gif");
