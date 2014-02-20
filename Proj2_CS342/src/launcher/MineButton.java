@@ -16,14 +16,17 @@ public class MineButton extends JButton{
 	private static MinesGame theGame;
 
 	/*imgIcon field*/
-	private static Image allImgs[] = new Image[10];
+	private static Image allImgs[] = new Image[12];
 	
-	private static boolean imgsIsSet = false, hasSetIcon = false;
+	private static boolean imgsIsSet = false;
 	private static ImageIcon[] numImgList = null;
 	private static ImageIcon[] mineImgList = null;
-	private static ImageIcon	flagImg 	= null;
+	private static ImageIcon flagImg 	= null;
+	private static ImageIcon qImg 	= null;
 	
+	private boolean hasSetIcon = false, isOpen = false;
 	private int imgIndex;
+	private int markIndex = 0;// 0  = blank, 1 = flag, 2 = ?
 	private final int xPos, yPos;
 
 	public MineButton(int x, int y) {
@@ -36,19 +39,41 @@ public class MineButton extends JButton{
 	}
 	
 	public void open(){
+		if (markIndex > 0){
+			return;
+		}
+		getModel().setPressed(true);
+		getModel().setEnabled(false);
+		chooseIcon(true);
 		theGame.openSpot(xPos, yPos);
-		chooseIcon();
+	}
+	
+	public void toggle(){
+		++markIndex;
+		markIndex %= 3;
+		if (markIndex != 0)
+			getModel().setEnabled(false);
+		else
+			getModel().setEnabled(true);
+		chooseIcon(false);
 	}
 
 	public static void setGame(MinesGame temp) {
 		theGame = temp;
 	}
 	
-	public void chooseIcon(){// should be called on click (or pressed)
-		imgIndex = getValue();// for now
-		//this.setPressedIcon(mineImgList[imgIndex]);//idk why dis doesn't work
-		
-		hasSetIcon = true;
+	public void chooseIcon(boolean isOpening){// should be called on click (or pressed)
+		if (markIndex == 0 && isOpening)
+			imgIndex = getValue();// for now
+		else if (markIndex == 0){
+			imgIndex = 0;
+		}else{
+			imgIndex = 9 + markIndex;
+		}
+		//this.setPressedIcon(mineImgList[0]);//idk why dis doesn't work
+		hasSetIcon = imgIndex > 0;
+		this.repaint();
+		//hasSetIcon = false;
 	}
 	
 	@Override
@@ -56,8 +81,8 @@ public class MineButton extends JButton{
 		super.paint(g);
 		if (!hasSetIcon || imgIndex < 1)
 			return;
-		int x = this.getPreferredSize().width / 2 - allImgs[imgIndex].getWidth(this) / 2;
-		int y = this.getPreferredSize().height / 2 - allImgs[imgIndex].getHeight(this) / 2;
+		int x = this.getSize().width / 2 - allImgs[imgIndex].getWidth(null) / 2;
+		int y = this.getSize().height / 2 - allImgs[imgIndex].getHeight(null) / 2;
 		if (imgIndex > 0)
 			g.drawImage(allImgs[imgIndex], x, y, this);
 	}
@@ -83,11 +108,17 @@ public class MineButton extends JButton{
 				temp.getResource("images/mine1.gif")));
 		mineImgList[1] = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
 				temp.getResource("images/mine2.gif")));
-		System.out.println(mineImgList[0]);
+		//System.out.println(mineImgList[0]);
 		
-		allImgs[9] = mineImgList[0].getImage(); 
+		allImgs[9] = mineImgList[0].getImage();
 		
-		flagImg = new ImageIcon("images/flag.gif");
+		flagImg = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				temp.getResource("images/flag.gif")));
+		allImgs[10] = flagImg.getImage();
+		qImg = new ImageIcon(Toolkit.getDefaultToolkit().getImage(
+				temp.getResource("images/wildcard.gif")));
+		allImgs[11] = qImg.getImage();
+		
 		imgsIsSet = true;
 	}
 }

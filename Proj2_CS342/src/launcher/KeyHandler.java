@@ -11,12 +11,13 @@ public class KeyHandler extends MouseAdapter {
 	@Override
 	public void mouseClicked(MouseEvent e) {//combination of press release
 		MineButton temp = (MineButton)e.getSource();
-		temp.open();
-		System.out.println("The vlaue under the button: " + temp.getValue());
+		System.out.println("The value under the button: " + temp.getValue());
 		if (e.getButton() == MouseEvent.BUTTON1){
+			temp.open();
 			System.out.println("Left, clicked");
 		}
 		if (e.getButton() == MouseEvent.BUTTON3){
+			temp.toggle();
 			System.out.println("Right, clicked");
 		}
 	}

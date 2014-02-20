@@ -24,7 +24,7 @@ public class MinesGame {
 		System.out.println(usrGrid[0][0]);
 		bombValue = getBombValue();// 9 allows aligned print
 		genBoard();
-		printBoard();
+		//printBoard();
 	}
 
 	/**
@@ -54,6 +54,8 @@ public class MinesGame {
 	 * @return value at position
 	 */
 	public int openSpot(int x, int y) {
+		if (usrGrid[x][y])
+			return ansGrid[x][y];
 		usrGrid[x][y] = true;
 		--numSpacesLeft;
 		theGUI.openSpot(x, y, ansGrid[x][y]);

@@ -32,6 +32,7 @@ public class MainFrame extends JFrame{
 		super(title);
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		//frame Icon
 		MediaTracker tracker = new MediaTracker(this);
@@ -100,7 +101,8 @@ public class MainFrame extends JFrame{
 		menuGame = new JMenu("Game");
 		resetItem = new JMenuItem("Reset");
 		toptenItem = new JMenuItem("Top ten");
-		exitItem = new JMenuItem("eXit");
+		exitItem = new JMenuItem("Exit");
+		exitItem.setMnemonic(KeyEvent.VK_X);
 		menuHelp = new JMenu("Help");
 		helpItem = new JMenuItem("Help");
 		aboutItem = new JMenuItem("About");
