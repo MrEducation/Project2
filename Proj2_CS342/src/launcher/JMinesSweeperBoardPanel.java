@@ -14,7 +14,7 @@ public class JMinesSweeperBoardPanel extends JPanel {
 	private final int buttonSize;
 	private final int pixSpacing;
 	private final int pWidth, pHeight;
-	private JButton board[][];
+	private MineButton board[][];
 	private KeyHandler mouseListener;
 	
 	public JMinesSweeperBoardPanel(){
@@ -27,8 +27,8 @@ public class JMinesSweeperBoardPanel extends JPanel {
 		pWidth = (buttonSize + pixSpacing) * numCols + pixSpacing;
 		pHeight = (buttonSize + pixSpacing) * numRows + pixSpacing;
 		mouseListener = new KeyHandler();
-		board = new JButton[numCols][numRows];// (x, y)
-		MineButton.setGame(new MinesGame(numRows, numCols, numBombs));
+		board = new MineButton[numCols][numRows];// (x, y)
+		MineButton.setGame(new MinesGame(numRows, numCols, numBombs, this));
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension(pWidth, pHeight));
 		addSquares();
@@ -40,7 +40,6 @@ public class JMinesSweeperBoardPanel extends JPanel {
 		for(int y = 0; y < numRows; y++){
 			yLoc = pixSpacing + (buttonSize + pixSpacing) * y;
 			for(int x = 0; x < numCols; x++){
-				//aButton = new JButton("(" + y + ", " + x + ")");
 				aButton = new MineButton(x, y);
 				aButton.addMouseListener(mouseListener);
 				xLoc = pixSpacing + (buttonSize + pixSpacing) * x;
@@ -51,5 +50,12 @@ public class JMinesSweeperBoardPanel extends JPanel {
 				this.add(aButton);
 			}
 		}
+	}
+	
+	public void openSpot(int x, int y, int val){
+		if (val == MinesGame.getBombValue())
+			board[x][y].chooseIcon();
+		board[x][y].getModel().setPressed(true);
+		board[x][y].getModel().setEnabled(false);
 	}
 }
