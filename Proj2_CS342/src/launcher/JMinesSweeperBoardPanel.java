@@ -3,6 +3,7 @@ package launcher;
 import java.awt.Dimension;
 import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -16,6 +17,14 @@ public class JMinesSweeperBoardPanel extends JPanel {
 	private final int pWidth, pHeight;
 	private MineButton board[][];
 	private KeyHandler mouseListener;
+	
+	/*imgIcon field*/
+	private ImageIcon[] numImgList = null;
+	private ImageIcon[] mineImgList = null;
+	private ImageIcon 	closeImg	= null;
+	private ImageIcon	flagImg 	= null;
+	private ImageIcon	pressedImg 	= null;
+	
 	
 	public JMinesSweeperBoardPanel(){
 		super();
@@ -50,6 +59,21 @@ public class JMinesSweeperBoardPanel extends JPanel {
 				this.add(aButton);
 			}
 		}
+	}	
+	
+	/*image loading method*/
+	public void setImg(){
+		numImgList = new ImageIcon[7];
+		for(int i=0; i<7; i++)
+			numImgList[i] = new ImageIcon("img/"+(i+1)+"s.gif");
+		
+		mineImgList = new ImageIcon[2];
+		for(int i=0; i<2; i++)
+			mineImgList[i] = new ImageIcon("img/"+(i+1)+".gif");
+		
+		closeImg = new ImageIcon("img/close.gif");
+		flagImg = new ImageIcon("img/flag.gif");
+		pressedImg = new ImageIcon("img/pressed.gif");
 	}
 	
 	public void openSpot(int x, int y, int val){
