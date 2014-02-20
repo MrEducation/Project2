@@ -40,6 +40,7 @@ public class MainFrame extends JFrame{
 		setIconImage(img);
 		this.add(new JMinesSweeperBoardPanel());
 		this.pack();
+		this.setResizable(false);
 		this.setVisible(true);
 		
 	}
@@ -80,6 +81,7 @@ public class MainFrame extends JFrame{
 		//remove game
 		//set new game
 		this.pack();
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 
