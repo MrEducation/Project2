@@ -57,6 +57,7 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	}
 	
 	public void openSpot(int x, int y, int val){
+		
 		board[x][y].chooseIcon();
 		board[x][y].getModel().setPressed(true);
 		board[x][y].getModel().setEnabled(false);

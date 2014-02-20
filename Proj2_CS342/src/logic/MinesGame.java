@@ -6,7 +6,7 @@ import launcher.JMinesSweeperBoardPanel;
 
 public class MinesGame {
 	private JMinesSweeperBoardPanel theGUI;
-	private int numCols, numRows, numBombs;
+	private int numCols, numRows, numBombs, numSpacesLeft;
 	private int ansGrid[][];
 	boolean usrGrid[][];
 	int xForBombs[], yForBombs[];
@@ -17,6 +17,7 @@ public class MinesGame {
 		theGUI = daGUI;
 		numCols = cols;
 		numRows = rows;
+		numSpacesLeft = numRows * numCols;
 		numBombs = bombs;
 		ansGrid = new int[numCols][numRows];// initializes to zeros
 		usrGrid = new boolean[numCols][numRows];// initializes to false
@@ -54,14 +55,18 @@ public class MinesGame {
 	 */
 	public int openSpot(int x, int y) {
 		usrGrid[x][y] = true;
+		--numSpacesLeft;
 		theGUI.openSpot(x, y, ansGrid[x][y]);
 		if (ansGrid[x][y] == 9) {
 			openBombs();
+			System.out.println("YOU LOSE!!");
 			return getBombValue();
 		}
 		if (ansGrid[x][y] == 0) {
 			openSurrounding(x, y);
 		}
+		if (numSpacesLeft == numBombs)
+			System.out.println("YOU WIN!");
 		return ansGrid[x][y];
 	}
 
@@ -71,14 +76,28 @@ public class MinesGame {
 					ansGrid[xForBombs[i]][yForBombs[i]]);
 		}
 	}
+	
+	private boolean alreadySet(int x, int y, int len){
+		for (int i = 0; i < len; ++i){
+			if (xForBombs[i] == x && yForBombs[i] == y)
+				return true;
+		}
+		return false;
+	}
 
 	private void genBoard() {
 		xForBombs = new int[numBombs];
 		yForBombs = new int[numBombs];
 		Random temp = new Random();
-		for (int i = 0; i < numBombs; ++i) {
-			xForBombs[i] = temp.nextInt(numBombs);
-			yForBombs[i] = temp.nextInt(numBombs);
+		for (int i = 0; i < numBombs; ) {
+			int x = temp.nextInt(numBombs);
+			int y = temp.nextInt(numBombs);
+			if (!alreadySet(x, y, i)){
+				xForBombs[i] = x;
+				yForBombs[i] = y;
+			}
+			else continue;//skip ++i
+			++i;
 		}
 		for (int i = 0; i < numBombs; ++i) {
 
