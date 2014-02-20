@@ -60,21 +60,6 @@ public class JMinesSweeperBoardPanel extends JPanel{
 				this.add(aButton);
 			}
 		}
-	}	
-	
-	/*image loading method*/
-	public void setImg(){
-		numImgList = new ImageIcon[7];
-		for(int i=0; i<7; i++)
-			numImgList[i] = new ImageIcon("img/"+(i+1)+"s.gif");
-		
-		mineImgList = new ImageIcon[2];
-		for(int i=0; i<2; i++)//
-			mineImgList[i] = new ImageIcon("img/"+(i+1)+".gif");
-		
-		closeImg = new ImageIcon("img/close.gif");
-		flagImg = new ImageIcon("img/flag.gif");
-		pressedImg = new ImageIcon("img/pressed.gif");
 	}
 	
 	public void openSpot(int x, int y, int val){
