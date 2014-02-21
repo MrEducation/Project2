@@ -19,8 +19,6 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	private MineButton board[][];
 	private KeyHandler mouseListener;
 	
-	
-	
 	public JMinesSweeperBoardPanel(){
 		super();
 		numRows = 10;

@@ -3,17 +3,13 @@ package launcher;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.net.URL;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JToggleButton;
 
 import logic.MinesGame;
 
 public class MineButton extends JButton{
-	private static MinesGame theGame;
 
 	/*imgIcon field*/
 	private static Image allImgs[] = new Image[12];
@@ -23,6 +19,9 @@ public class MineButton extends JButton{
 	private static ImageIcon[] mineImgList = null;
 	private static ImageIcon flagImg 	= null;
 	private static ImageIcon qImg 	= null;
+	
+	private static MinesGame theGame;
+	private static boolean bombsRevealed = false;
 	
 	private boolean hasSetIcon = false, isOpen = false;
 	private int imgIndex;
@@ -34,21 +33,32 @@ public class MineButton extends JButton{
 		imgIndex = -1;
 		xPos = x;
 		yPos = y;
+		resetFeilds();
 		if (!imgsIsSet)
 			setImg();
 	}
 	
+	private void resetFeilds(){
+		bombsRevealed =  false;
+	}
+	
 	public void open(){
+		if (bombsRevealed && getValue() != 9){
+			return;
+		}
 		if (markIndex > 0){
 			return;
 		}
 		getModel().setPressed(true);
 		getModel().setEnabled(false);
+		isOpen = true;
 		chooseIcon(true);
 		theGame.openSpot(xPos, yPos);
 	}
 	
 	public void toggle(){
+		if (bombsRevealed || isOpen)
+			return;
 		++markIndex;
 		markIndex %= 3;
 		if (markIndex != 0)
@@ -70,6 +80,8 @@ public class MineButton extends JButton{
 		}else{
 			imgIndex = 9 + markIndex;
 		}
+		if (imgIndex == 9)
+			bombsRevealed = true;
 		//this.setPressedIcon(mineImgList[0]);//idk why dis doesn't work
 		hasSetIcon = imgIndex > 0;
 		this.repaint();

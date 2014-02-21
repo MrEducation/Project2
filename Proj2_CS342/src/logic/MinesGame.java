@@ -7,7 +7,7 @@ import launcher.JMinesSweeperBoardPanel;
 public class MinesGame {
 	private JMinesSweeperBoardPanel theGUI;
 	private int numCols, numRows, numBombs, numSpacesLeft;
-	private int ansGrid[][];
+	private int ansGrid[][], gameState;//gameState = 0 still playing, 1 win, 2 lost
 	boolean usrGrid[][];
 	int xForBombs[], yForBombs[];
 	private final int bombValue;
@@ -23,6 +23,7 @@ public class MinesGame {
 		usrGrid = new boolean[numCols][numRows];// initializes to false
 		System.out.println(usrGrid[0][0]);
 		bombValue = getBombValue();// 9 allows aligned print
+		gameState = 0;
 		genBoard();
 		//printBoard();
 	}
@@ -61,14 +62,22 @@ public class MinesGame {
 		theGUI.openSpot(x, y, ansGrid[x][y]);
 		if (ansGrid[x][y] == 9) {
 			openBombs();
-			System.out.println("YOU LOSE!!");
+			if (gameState == 0)
+				gameState = 2;
+			else if (gameState == 1)
+				return 9;
+			System.out.println("YOU LOSE!");
 			return getBombValue();
 		}
 		if (ansGrid[x][y] == 0) {
 			openSurrounding(x, y);
 		}
-		if (numSpacesLeft == numBombs)
+		if (numSpacesLeft == numBombs){
+			//theGUI.u win dialog/save high score
+			gameState = 1;
+			openBombs();
 			System.out.println("YOU WIN!");
+		}
 		return ansGrid[x][y];
 	}
 
