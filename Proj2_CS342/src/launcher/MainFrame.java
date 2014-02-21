@@ -7,6 +7,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import logic.MinesGame;
 
@@ -43,6 +44,7 @@ public class MainFrame extends JFrame{
 		
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
 		} catch (Exception e) {
 		    // If Nimbus is not available, you can set the GUI to another look and feel.
 		}

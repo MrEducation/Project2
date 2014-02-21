@@ -85,10 +85,13 @@ public class MineButton extends JButton{
 			return;
 		++markIndex;
 		markIndex %= 3;
+		/*
 		if (markIndex != 0)
 			getModel().setEnabled(false);
-		else
+		else{
 			getModel().setEnabled(true);
+		}
+		*/
 		chooseIcon(false);
 	}
 
