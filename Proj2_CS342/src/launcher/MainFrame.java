@@ -13,6 +13,7 @@ import logic.MinesGame;
 
 
 public class MainFrame extends JFrame{
+	private JMinesSweeperBoardPanel mineGUI;
 	
 	private JMenuBar menuBar = null;
 	
@@ -88,8 +89,8 @@ public class MainFrame extends JFrame{
 	
 	
 	public void resetGame(){
-		//remove game
-		//set new game
+		//this.remove(this.mineGUI);
+		//this.mineGUI = new JMinesSweeperBoardPanel();
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
@@ -121,7 +122,7 @@ public class MainFrame extends JFrame{
 		menuBar.add(menuHelp);
 		
 		//toptenItem.addActionListener(new toptenActionListener());
-		//resetItem.addActionListener(new resetActionListener());
+		//resetItem.addActionListener(new newActionListener());
 		aboutItem.addActionListener(new dialogActionListener());
 		helpItem.addActionListener(new dialogActionListener());
 		
