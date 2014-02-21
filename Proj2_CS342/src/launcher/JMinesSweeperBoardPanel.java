@@ -3,11 +3,8 @@ package launcher;
 import java.awt.Dimension;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import javax.swing.*;
 import logic.MinesGame;
 
 public class JMinesSweeperBoardPanel extends JPanel{
