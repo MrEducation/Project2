@@ -56,6 +56,30 @@ public class MineButton extends JButton{
 		theGame.openSpot(xPos, yPos);
 	}
 	
+	private boolean canSpecialOpen(){
+		int i = getValue() - theGame.getNumFlagAround(xPos, yPos);
+		return i == 0;
+	}
+	
+	public boolean isFlaged(){
+		return markIndex == 1;
+	}
+	
+	public void specialOpen(){
+		if (bombsRevealed && getValue() != 9){
+			return;
+		}
+		if (markIndex > 0){
+			return;
+		}
+		getModel().setPressed(true);
+		getModel().setEnabled(false);
+		isOpen = true;
+		chooseIcon(true);
+		if (canSpecialOpen())
+			theGame.openSurrounding(xPos, yPos);
+	}
+	
 	public void toggle(){
 		if (bombsRevealed || isOpen)
 			return;

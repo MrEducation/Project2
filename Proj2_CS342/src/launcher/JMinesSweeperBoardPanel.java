@@ -51,6 +51,10 @@ public class JMinesSweeperBoardPanel extends JPanel{
 		}
 	}
 	
+	public boolean isFlagged(int x, int y){
+		return board[x][y].isFlaged();
+	}
+	
 	public void openSpot(int x, int y, int val){
 		board[x][y].open();
 	}

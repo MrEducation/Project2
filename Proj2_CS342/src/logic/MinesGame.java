@@ -127,82 +127,110 @@ public class MinesGame {
 		}
 	}
 
-	private boolean isValid(int x, int y) {
+	private boolean isInbounds(int x, int y) {
 		if (x < 0 || y < 0)
 			return false;
 		if (x >= numCols || y >= numRows)
 			return false;
-		if (usrGrid[x][y] == true)
-			return false;
 		return true;
 	}
+	
+	public int getNumFlagAround(int x, int y){
+		int total = 0;
+		if (isInbounds(x - 1, y - 1)) {// top left
+				total += theGUI.isFlagged(x -1, y - 1)? 1 : 0;
+		}
+		if (isInbounds(x, y - 1)) {// top
+				total += theGUI.isFlagged(x, y - 1)? 1 : 0;
+		}
+		if (isInbounds(x + 1, y - 1)) {// top right
+				total += theGUI.isFlagged(x + 1, y - 1)? 1 : 0;
+		}
+		if (isInbounds(x + 1, y)) {// right
+				total += theGUI.isFlagged(x + 1, y)? 1 : 0;
+		}
+		if (isInbounds(x + 1, y + 1)) {// bot right
+				total += theGUI.isFlagged(x + 1, y + 1)? 1 : 0;
+		}
+		if (isInbounds(x, y + 1)) {// bot
+				total += theGUI.isFlagged(x, y + 1)? 1 : 0;
+		}
+		if (isInbounds(x - 1, y + 1)) {// bot left
+				total += theGUI.isFlagged(x - 1, y + 1)? 1 : 0;
+		}
+		if (isInbounds(x - 1, y)) {// left
+				total += theGUI.isFlagged(x - 1, y)? 1 : 0;
+		}
+		System.out.println(total);
+		return total;
+	}
 
-	private void openSurrounding(int x, int y) {
+	public void openSurrounding(int x, int y) {
 		// checks out of bounds
-		if (isValid(x - 1, y - 1)) {// top left
+		if (isInbounds(x - 1, y - 1) && !usrGrid[x - 1][y - 1] && !theGUI.isFlagged(x - 1, y - 1)) {// top left
 			openSpot(x - 1, y - 1);
 		}
-		if (isValid(x, y - 1)) {// top
+		if (isInbounds(x, y - 1) && !usrGrid[x][y - 1] && !theGUI.isFlagged(x, y - 1)) {// top
 			openSpot(x, y - 1);
 		}
-		if (isValid(x + 1, y - 1)) {// top right
+		if (isInbounds(x + 1, y - 1) && !usrGrid[x + 1][y - 1] && !theGUI.isFlagged(x + 1, y - 1)) {// top right
 			openSpot(x + 1, y - 1);
 		}
-		if (isValid(x + 1, y)) {// right
+		if (isInbounds(x + 1, y) && !usrGrid[x + 1][y] && !theGUI.isFlagged(x + 1, y)) {// right
 			openSpot(x + 1, y);
 		}
-		if (isValid(x + 1, y + 1)) {// bot right
+		if (isInbounds(x + 1, y + 1) && !usrGrid[x + 1][y + 1] && !theGUI.isFlagged(x + 1, y + 1)) {// bot right
 			openSpot(x + 1, y + 1);
 		}
-		if (isValid(x, y + 1)) {// bot
+		if (isInbounds(x, y + 1) && !usrGrid[x][y + 1] && !theGUI.isFlagged(x, y + 1)) {// bot
 			openSpot(x, y + 1);
 		}
-		if (isValid(x - 1, y + 1)) {// bot left
+		if (isInbounds(x - 1, y + 1) && !usrGrid[x - 1][y + 1] && !theGUI.isFlagged(x - 1, y + 1)) {// bot left
 			openSpot(x - 1, y + 1);
 		}
-		if (isValid(x - 1, y)) {// left
+		if (isInbounds(x - 1, y) && !usrGrid[x - 1][y] && !theGUI.isFlagged(x - 1, y)) {// left
 			openSpot(x - 1, y);
 		}
 	}
 
 	private void setSurrounding(int x, int y) {
 		// checks out of bounds
-		if (isValid(x - 1, y - 1)) {// top left
+		if (isInbounds(x - 1, y - 1) && !usrGrid[x][y]) {// top left
 			if (ansGrid[x - 1][y - 1] != bombValue) {
 				ansGrid[x - 1][y - 1] += 1;
 			}
 		}
-		if (isValid(x, y - 1)) {// top
+		if (isInbounds(x, y - 1) && !usrGrid[x][y]) {// top
 			if (ansGrid[x][y - 1] != bombValue) {
 				ansGrid[x][y - 1] += 1;
 			}
 		}
-		if (isValid(x + 1, y - 1)) {// top right
+		if (isInbounds(x + 1, y - 1) && !usrGrid[x][y]) {// top right
 			if (ansGrid[x + 1][y - 1] != bombValue) {
 				ansGrid[x + 1][y - 1] += 1;
 			}
 		}
-		if (isValid(x + 1, y)) {// right
+		if (isInbounds(x + 1, y) && !usrGrid[x][y]) {// right
 			if (ansGrid[x + 1][y] != bombValue) {
 				ansGrid[x + 1][y] += 1;
 			}
 		}
-		if (isValid(x + 1, y + 1)) {// bot right
+		if (isInbounds(x + 1, y + 1) && !usrGrid[x][y]) {// bot right
 			if (ansGrid[x + 1][y + 1] != bombValue) {
 				ansGrid[x + 1][y + 1] += 1;
 			}
 		}
-		if (isValid(x, y + 1)) {// bot
+		if (isInbounds(x, y + 1) && !usrGrid[x][y]) {// bot
 			if (ansGrid[x][y + 1] != bombValue) {
 				ansGrid[x][y + 1] += 1;
 			}
 		}
-		if (isValid(x - 1, y + 1)) {// bot left
+		if (isInbounds(x - 1, y + 1) && !usrGrid[x][y]) {// bot left
 			if (ansGrid[x - 1][y + 1] != bombValue) {
 				ansGrid[x - 1][y + 1] += 1;
 			}
 		}
-		if (isValid(x - 1, y)) {// left
+		if (isInbounds(x - 1, y) && !usrGrid[x][y]) {// left
 			if (ansGrid[x - 1][y] != bombValue) {
 				ansGrid[x - 1][y] += 1;
 			}
