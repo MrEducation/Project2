@@ -6,13 +6,12 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import logic.MinesGame;
 
 
-public class MainFrame extends JFrame{
+public class MainFrame extends JFrame implements ActionListener{
 	private JMinesSweeperBoardPanel mineGUI;
 	
 	private JMenuBar menuBar = null;
@@ -32,6 +31,12 @@ public class MainFrame extends JFrame{
 	
 	public MainFrame(String title){
 		super(title);
+		try {
+			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			UIManager.setLookAndFeel(new NimbusLookAndFeel());
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -42,17 +47,11 @@ public class MainFrame extends JFrame{
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		tracker.addImage(img, 0);
 		setIconImage(img);
-		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			UIManager.setLookAndFeel(new NimbusLookAndFeel());
-		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
-		}
-		this.add(new JMinesSweeperBoardPanel());
-		this.pack();
+		mineGUI = new JMinesSweeperBoardPanel(); 
+		this.add(mineGUI);// MAKE SURE THIS IS ADDED LAST!!!!!!!!
 		this.setResizable(false);
 		this.setVisible(true);
+		this.pack();
 		
 	}
 	
@@ -69,28 +68,10 @@ public class MainFrame extends JFrame{
 		}
 	}
 	
-	class exitActionListener implements ActionListener { //for exit menu
-		public void actionPerformed(ActionEvent e){
-			int val;
-			val = JOptionPane.showConfirmDialog(MainFrame.this,endString, "Game End",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-			if(val == JOptionPane.YES_OPTION) System.exit(0);
-		}
-	}
-	
-	class dialogActionListener implements ActionListener{ 
-		public void actionPerformed(ActionEvent e){
-			if(e.getSource() == helpItem)
-				JOptionPane.showMessageDialog(MainFrame.this, helpString,"Help", JOptionPane.INFORMATION_MESSAGE);
-			else if(e.getSource() == aboutItem)
-				JOptionPane.showMessageDialog(MainFrame.this, infoString, "Information", JOptionPane.INFORMATION_MESSAGE);
-		}
-	}
-	
-	
 	public void resetGame(){
-		//this.remove(this.mineGUI);
-		//this.mineGUI = new JMinesSweeperBoardPanel();
+		this.remove(mineGUI);
+		mineGUI = new JMinesSweeperBoardPanel();
+		this.add(mineGUI);
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
@@ -102,6 +83,7 @@ public class MainFrame extends JFrame{
 	public void initMenu(){
 		menuBar = new JMenuBar();
 		menuGame = new JMenu("Game");
+		menuGame.setMnemonic(KeyEvent.VK_M);
 		resetItem = new JMenuItem("Reset");
 		toptenItem = new JMenuItem("Top ten");
 		exitItem = new JMenuItem("Exit");
@@ -110,7 +92,7 @@ public class MainFrame extends JFrame{
 		helpItem = new JMenuItem("Help");
 		aboutItem = new JMenuItem("About");
 		
-		exitItem.addActionListener(new exitActionListener());
+		exitItem.addActionListener(this);
 		
 		menuGame.add(resetItem);
 		menuGame.add(toptenItem);
@@ -122,16 +104,37 @@ public class MainFrame extends JFrame{
 		menuBar.add(menuHelp);
 		
 		//toptenItem.addActionListener(new toptenActionListener());
-		//resetItem.addActionListener(new newActionListener());
-		aboutItem.addActionListener(new dialogActionListener());
-		helpItem.addActionListener(new dialogActionListener());
+		resetItem.addActionListener(new newActionListener());
+		aboutItem.addActionListener(this);
+		helpItem.addActionListener(this);
 		
 		this.setJMenuBar(menuBar);
 	}
 
+	public void actionPerformed(ActionEvent e){
+		int val;
+		if(e.getSource() == helpItem)
+			JOptionPane.showMessageDialog(this, helpString,"Help", JOptionPane.INFORMATION_MESSAGE);
+		else if(e.getSource() == aboutItem)
+			JOptionPane.showMessageDialog(this, infoString, "Information", JOptionPane.INFORMATION_MESSAGE);
+		else if (e.getSource() == exitItem){
+			val = JOptionPane.showConfirmDialog(this,endString, "Game End",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(val == JOptionPane.YES_OPTION) System.exit(0);
+		}
+	}
 	
 	public static void main(String args[])
 	{
+		//setupMenuKey(new MainFrame("Mine Sweeper"));
 		new MainFrame("Mine Sweeper");
+	}
+
+
+
+//	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
