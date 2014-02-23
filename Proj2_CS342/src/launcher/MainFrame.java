@@ -1,14 +1,11 @@
 package launcher;
 
-import java.io.*;
 import java.net.URL;
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
-
-import logic.MinesGame;
 
 
 public class MainFrame extends JFrame implements ActionListener{
@@ -25,12 +22,17 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JMenuItem helpItem = null;
 	private JMenuItem aboutItem = null;
 	
+	private JLabel timerText;
+	private Timer timer;
+	private int timeElapsed;
+	
 	private String endString = "Do you want to quit the Game?";
 	private String helpString = "Help?"; 
 	private String infoString = "CS342 Project 2";
 	
 	public MainFrame(String title){
 		super(title);
+		this.setLayout(new BorderLayout());
 		try {
 			//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -41,25 +43,26 @@ public class MainFrame extends JFrame implements ActionListener{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
-		//frame Icon
-		MediaTracker tracker = new MediaTracker(this);
-		URL temp = MainFrame.class.getClassLoader().getResource("images/reset.gif");//top left image
+		//frame 
+		URL temp = MainFrame.class.getClassLoader().getResource("images/mine2.gif");//top left image
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
-		tracker.addImage(img, 0);
 		setIconImage(img);
+		
+		JPanel infoBar = new JPanel();
+		infoBar.setLayout(new FlowLayout());
+		timerText = new JLabel();
+		timeElapsed = 0;
+		timerText.setText("" + timeElapsed);
+		infoBar.add(timerText);
+		
 		mineGUI = new JMinesSweeperBoardPanel(); 
+		this.add(infoBar, BorderLayout.NORTH);
 		this.add(mineGUI);// MAKE SURE THIS IS ADDED LAST!!!!!!!!
-		this.setResizable(false);
 		this.setVisible(true);
 		this.pack();
-		
-	}
-	
-	/* [ActionListener] */
-	class newActionListener implements ActionListener {//when choose "Reset" on the menuBar
-		public void actionPerformed(ActionEvent e){
-			resetGame(); 
-		}
+		this.setResizable(false);
+		timer = new Timer(1000, this);
+		timer.start();
 	}
 	
 	class bectTimeActionListener implements ActionListener { //for TopTen
@@ -76,8 +79,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.setResizable(false);
 		this.setVisible(true);
 	}
-
-	
 	
 	//member method
 	public void initMenu(){
@@ -102,11 +103,12 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		menuBar.add(menuGame);
 		menuBar.add(menuHelp);
-		
+
 		//toptenItem.addActionListener(new toptenActionListener());
-		resetItem.addActionListener(new newActionListener());
+		resetItem.addActionListener(this);
 		aboutItem.addActionListener(this);
 		helpItem.addActionListener(this);
+		
 		
 		this.setJMenuBar(menuBar);
 	}
@@ -121,20 +123,15 @@ public class MainFrame extends JFrame implements ActionListener{
 			val = JOptionPane.showConfirmDialog(this,endString, "Game End",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if(val == JOptionPane.YES_OPTION) System.exit(0);
+		} else if (e.getSource() == resetItem){
+			resetGame();
+		} else if (e.getSource() == timer){
+			timerText.setText("" + ++timeElapsed);
 		}
 	}
 	
 	public static void main(String args[])
 	{
-		//setupMenuKey(new MainFrame("Mine Sweeper"));
 		new MainFrame("Mine Sweeper");
-	}
-
-
-
-//	@Override
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }
