@@ -21,7 +21,7 @@ public class MinesGame {
 		numBombs = bombs;
 		ansGrid = new int[numCols][numRows];// initializes to zeros
 		usrGrid = new boolean[numCols][numRows];// initializes to false
-		System.out.println(usrGrid[0][0]);
+		//System.out.println(usrGrid[0][0]);
 		bombValue = getBombValue();// 9 allows aligned print
 		gameState = 0;
 		genBoard();
@@ -161,7 +161,7 @@ public class MinesGame {
 		if (isInbounds(x - 1, y)) {// left
 				total += theGUI.isFlagged(x - 1, y)? 1 : 0;
 		}
-		System.out.println(total);
+		//System.out.println(total);
 		return total;
 	}
 

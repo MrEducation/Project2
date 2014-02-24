@@ -33,11 +33,11 @@ public class MainFrame extends JFrame implements ActionListener{
 	private String helpString = "Help?"; 
 	private String infoString = "CS342 Project 2";
 	
-	private class Score{
-		public String name;// won't be used outside this class
-		public int time;// won't be used outside this class
+	private static class Score{
+		public String name;// won't be used outside MainFrame class
+		public int time;// won't be used outside MainFrame class
 		
-		public Score(String n, int t){
+		public Score(int t, String n){
 			name = n;
 			time = t;
 		}
@@ -54,7 +54,7 @@ public class MainFrame extends JFrame implements ActionListener{
 	{
 		File temp = new File("Scores.txt");
 		scores = new ArrayList<Score>();
-		System.out.println(temp.getAbsolutePath());
+		//System.out.println(temp.getAbsolutePath());
 		BufferedReader reader = null; 
 		BufferedWriter writer = null; 
 		try {
@@ -63,8 +63,10 @@ public class MainFrame extends JFrame implements ActionListener{
 			for (String t = reader.readLine(); t != null;  t = reader.readLine()){
 				StringTokenizer st = new StringTokenizer(t);
 				while(st.hasMoreTokens()){
-					System.out.println(st.nextToken() + " " + i++);
-					System.out.println(st.nextToken() + " " + i++);
+					//System.out.println(Integer.parseInt(st.nextToken()) + " " + i++);
+					//System.out.println(st.nextToken() + " " + i++);
+					scores.add(new Score(Integer.parseInt(st.nextToken()),
+							st.nextToken()));
 				}
 			}
 		} catch (FileNotFoundException e) {
@@ -73,14 +75,12 @@ public class MainFrame extends JFrame implements ActionListener{
 				writer = new BufferedWriter(new FileWriter(temp));
 				for (int i = 0; i < 10; i++){
 					writer.write("9999    Computer\n");
+					scores.add(new Score(9999, "Computer"));
 				}
 				writer.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			// TODO Create the default scores list
-			
-			//e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
