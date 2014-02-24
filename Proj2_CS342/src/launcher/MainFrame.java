@@ -1,6 +1,9 @@
 package launcher;
 
+import java.io.*;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -30,6 +33,60 @@ public class MainFrame extends JFrame implements ActionListener{
 	private String helpString = "Help?"; 
 	private String infoString = "CS342 Project 2";
 	
+	private class Score{
+		public String name;// won't be used outside this class
+		public int time;// won't be used outside this class
+		
+		public Score(String n, int t){
+			name = n;
+			time = t;
+		}
+		
+		public int compareTo(Score other){
+			return this.time - other.time;
+		}
+	}
+	
+	private static ArrayList<Score> scores;
+
+	
+	public static void main(String args[])
+	{
+		File temp = new File("Scores.txt");
+		scores = new ArrayList<Score>();
+		System.out.println(temp.getAbsolutePath());
+		BufferedReader reader = null; 
+		BufferedWriter writer = null; 
+		try {
+			reader = new BufferedReader(new FileReader(temp));
+			int i = 0;
+			for (String t = reader.readLine(); t != null;  t = reader.readLine()){
+				StringTokenizer st = new StringTokenizer(t);
+				while(st.hasMoreTokens()){
+					System.out.println(st.nextToken() + " " + i++);
+					System.out.println(st.nextToken() + " " + i++);
+				}
+			}
+		} catch (FileNotFoundException e) {
+
+			try {
+				writer = new BufferedWriter(new FileWriter(temp));
+				for (int i = 0; i < 10; i++){
+					writer.write("9999    Computer\n");
+				}
+				writer.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			// TODO Create the default scores list
+			
+			//e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		new MainFrame("Mine Sweeper");
+	}
+	
 	public MainFrame(String title){
 		super(title);
 		this.setLayout(new BorderLayout());
@@ -44,7 +101,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		//frame 
-		URL temp = MainFrame.class.getClassLoader().getResource("images/mine2.gif");//top left image
+		URL temp = MainFrame.class.getClassLoader().getResource("images/gnomine_1.png");//top left image
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
 		
@@ -63,12 +120,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.setResizable(false);
 		timer = new Timer(1000, this);
 		timer.start();
-	}
-	
-	class bectTimeActionListener implements ActionListener { //for TopTen
-		public void actionPerformed(ActionEvent e){
-			//will do later
-		}
 	}
 	
 	public void resetGame(){
@@ -92,9 +143,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		menuHelp = new JMenu("Help");
 		helpItem = new JMenuItem("Help");
 		aboutItem = new JMenuItem("About");
-		
-		exitItem.addActionListener(this);
-		
+
 		menuGame.add(resetItem);
 		menuGame.add(toptenItem);
 		menuGame.add(exitItem);
@@ -108,7 +157,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		resetItem.addActionListener(this);
 		aboutItem.addActionListener(this);
 		helpItem.addActionListener(this);
-		
+		exitItem.addActionListener(this);
 		
 		this.setJMenuBar(menuBar);
 	}
@@ -128,10 +177,5 @@ public class MainFrame extends JFrame implements ActionListener{
 		} else if (e.getSource() == timer){
 			timerText.setText("" + ++timeElapsed);
 		}
-	}
-	
-	public static void main(String args[])
-	{
-		new MainFrame("Mine Sweeper");
 	}
 }
