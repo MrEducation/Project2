@@ -15,7 +15,7 @@ public class KeyHandler extends MouseAdapter {
 			temp.open();
 			//System.out.println("Left, clicked");
 		}
-		if (e.getButton() == MouseEvent.BUTTON3){
+		if (e.getButton() == MouseEvent.BUTTON3 && !isLeftDwn){// prevent confusion
 			temp.toggle();
 			//System.out.println("Right, clicked");
 		}

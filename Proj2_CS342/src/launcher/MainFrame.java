@@ -34,6 +34,8 @@ public class MainFrame extends JFrame implements ActionListener {
 	private String helpString = "Help?";
 	private String infoString = "CS342 Project 2";
 
+	private static final String filename = "Scores.txt";
+	private static final File scoresFile = new File(filename);
 	private static ArrayList<Score> scores;
 
 	private static class Score {
@@ -54,7 +56,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		
 		public String toString(){
-			return time + "    " + name;
+			return String.format("%.2f",time) + "    " + name;
 		}
 	}
 	
@@ -69,22 +71,22 @@ public class MainFrame extends JFrame implements ActionListener {
 	}
 
 	public static void main(String args[]) {
-		File temp = new File("Scores.txt");
 		scores = new ArrayList<Score>();
 		// System.out.println(temp.getAbsolutePath());
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
 		try {
-			reader = new BufferedReader(new FileReader(temp));
+			reader = new BufferedReader(new FileReader(scoresFile));
 			for (String t = reader.readLine(); t != null; t = reader.readLine()) {
 				StringTokenizer st = new StringTokenizer(t);
 				while (st.hasMoreTokens()) {
 					scores.add(new Score(Float.parseFloat(st.nextToken()), st.nextToken()));
 				}
 			}
+			reader.close();
 		} catch (FileNotFoundException e) {
 			try {
-				writer = new BufferedWriter(new FileWriter(temp));
+				writer = new BufferedWriter(new FileWriter(scoresFile));
 				for (int i = 0; i < 10; i++) {
 					writer.write("9999.0    Computer\n");
 					scores.add(new Score(9999.0f, "Computer"));
@@ -153,6 +155,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setVisible(true);
 	}
 	
+	private static void writeToFile(){//TODO Correct write to file
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(scoresFile));
+			for (int i = 0; i < 10; i++) {
+				writer.write(scores.get(i).toString() + '\n');
+			}
+			writer.close();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	public void handleEndGame(boolean hasWon){
 		
 		int val;
@@ -163,6 +178,11 @@ public class MainFrame extends JFrame implements ActionListener {
 				name = JOptionPane.showInputDialog(this, "New High: " +
 						String.format("%.2f",timeElapsed) + ". What's your name?");
 			if (name != null){
+				Score temp = new Score(timeElapsed, name);
+				int i = 9;
+				for (; i >= 0 && temp.compareTo(scores.get(i)) < 0; --i);
+				scores.add(i + 1, temp);
+				scores.remove(10);
 				//save highscore
 				JOptionPane.showMessageDialog(this, scoresAsString(), "Scores",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -173,8 +193,10 @@ public class MainFrame extends JFrame implements ActionListener {
 					JOptionPane.QUESTION_MESSAGE);
 			if (val == JOptionPane.YES_OPTION)
 				resetGame();
-			else
+			else{
+				writeToFile();
 				System.exit(0);
+			}
 		}else{
 			timer.stop();// pause timer
 			val = JOptionPane.showConfirmDialog(this, "You lost. Restart?", "Game Over",
@@ -182,8 +204,10 @@ public class MainFrame extends JFrame implements ActionListener {
 					JOptionPane.QUESTION_MESSAGE);
 			if (val == JOptionPane.YES_OPTION)
 				resetGame();
-			else
+			else{
+				writeToFile();
 				System.exit(0);
+			}
 		}
 	}
 

@@ -88,6 +88,8 @@ public class MineButton extends JButton{
 	}
 	
 	public void specialOpen(){
+		if (!isOpen)
+			return;
 		if (bombsBeingRevealed && getValue() != 9){
 			return;
 		}
