@@ -12,6 +12,10 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import logic.MinesGame;
 
+/**************************************************************
+//TODO Reset button and the number of bombs left in top panel
+***************************************************************/
+
 public class MainFrame extends JFrame implements ActionListener {
 	private JMinesSweeperBoardPanel mineGUI;
 
