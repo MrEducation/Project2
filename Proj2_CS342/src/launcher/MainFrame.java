@@ -10,6 +10,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
+import logic.MinesGame;
+
 public class MainFrame extends JFrame implements ActionListener {
 	private JMinesSweeperBoardPanel mineGUI;
 
@@ -26,27 +28,45 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	private JLabel timerText;
 	private Timer timer;
-	private int timeElapsed;
+	private float timeElapsed;
 
 	private String endString = "Do you want to quit the Game?";
 	private String helpString = "Help?";
 	private String infoString = "CS342 Project 2";
 
+	private static ArrayList<Score> scores;
+
 	private static class Score {
 		public String name;// won't be used outside MainFrame class
-		public int time;// won't be used outside MainFrame class
+		public float time;// won't be used outside MainFrame class
 
-		public Score(int t, String n) {
+		public Score(float t, String n) {
 			name = n;
 			time = t;
 		}
 
 		public int compareTo(Score other) {
-			return this.time - other.time;
+			if (this.time < other.time)
+				return -1;
+			else if (this.time > other.time)
+				return 1;
+			else return 0;
+		}
+		
+		public String toString(){
+			return time + "    " + name;
 		}
 	}
-
-	private static ArrayList<Score> scores;
+	
+	private static String scoresAsString(){
+		if (scores == null)
+			return "";
+		String temp = "";
+		for (int i = 0; i < scores.size(); ++i){
+			temp += (i + 1) + ".) " + scores.get(i).toString() + '\n';
+		}
+		return temp;
+	}
 
 	public static void main(String args[]) {
 		File temp = new File("Scores.txt");
@@ -56,22 +76,18 @@ public class MainFrame extends JFrame implements ActionListener {
 		BufferedWriter writer = null;
 		try {
 			reader = new BufferedReader(new FileReader(temp));
-			int i = 0;
 			for (String t = reader.readLine(); t != null; t = reader.readLine()) {
 				StringTokenizer st = new StringTokenizer(t);
 				while (st.hasMoreTokens()) {
-					// System.out.println(Integer.parseInt(st.nextToken()) + " " + i++);
-					// System.out.println(st.nextToken() + " " + i++);
-					scores.add(new Score(Integer.parseInt(st.nextToken()), st.nextToken()));
+					scores.add(new Score(Float.parseFloat(st.nextToken()), st.nextToken()));
 				}
 			}
 		} catch (FileNotFoundException e) {
-
 			try {
 				writer = new BufferedWriter(new FileWriter(temp));
 				for (int i = 0; i < 10; i++) {
-					writer.write("9999    Computer\n");
-					scores.add(new Score(9999, "Computer"));
+					writer.write("9999.0    Computer\n");
+					scores.add(new Score(9999.0f, "Computer"));
 				}
 				writer.close();
 			} catch (IOException e1) {
@@ -103,8 +119,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
 		// frame
-		URL temp = MainFrame.class.getClassLoader().getResource(
-				"images/gnomine_1.png");// top left image
+		URL temp = MainFrame.class.getClassLoader().getResource("images/gnomine_1.png");// top left image
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
 
@@ -115,23 +130,61 @@ public class MainFrame extends JFrame implements ActionListener {
 		timerText.setText("" + timeElapsed);
 		infoBar.add(timerText);
 
-		mineGUI = new JMinesSweeperBoardPanel();
+		mineGUI = new JMinesSweeperBoardPanel(this);
 		this.add(infoBar, BorderLayout.NORTH);
 		this.add(mineGUI);// MAKE SURE THIS IS ADDED LAST!!!!!!!!
 		this.setVisible(true);
 		this.pack();
 		this.setResizable(false);
-		timer = new Timer(1000, this);
+		timer = new Timer(50, this);
 		timer.start();
 	}
 
 	public void resetGame() {
+		MineButton.reset();
 		this.remove(mineGUI);
-		mineGUI = new JMinesSweeperBoardPanel();
+		timer.restart();
+		timeElapsed = 0;
+		this.timerText.setText("0.00");
+		mineGUI = new JMinesSweeperBoardPanel(this);
 		this.add(mineGUI);
 		this.pack();
 		this.setResizable(false);
 		this.setVisible(true);
+	}
+	
+	public void handleEndGame(boolean hasWon){
+		
+		int val;
+		String name = null;
+		if (hasWon){
+			timer.stop();// pause timer
+			if (timeElapsed < scores.get(9).time)
+				name = JOptionPane.showInputDialog(this, "New High: " +
+						String.format("%.2f",timeElapsed) + ". What's your name?");
+			if (name != null){
+				//save highscore
+				JOptionPane.showMessageDialog(this, scoresAsString(), "Scores",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+			val = JOptionPane.showConfirmDialog(this, "Restart?", "Game Over",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (val == JOptionPane.YES_OPTION)
+				resetGame();
+			else
+				System.exit(0);
+		}else{
+			timer.stop();// pause timer
+			val = JOptionPane.showConfirmDialog(this, "You lost. Restart?", "Game Over",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE);
+			if (val == JOptionPane.YES_OPTION)
+				resetGame();
+			else
+				System.exit(0);
+		}
 	}
 
 	// member method
@@ -161,28 +214,41 @@ public class MainFrame extends JFrame implements ActionListener {
 		aboutItem.addActionListener(this);
 		helpItem.addActionListener(this);
 		exitItem.addActionListener(this);
+		toptenItem.addActionListener(this);
 
 		this.setJMenuBar(menuBar);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		int val;
-		if (e.getSource() == helpItem)
+		if (e.getSource() == helpItem){
+			timer.stop();// pause timer
 			JOptionPane.showMessageDialog(this, helpString, "Help",
 					JOptionPane.INFORMATION_MESSAGE);
-		else if (e.getSource() == aboutItem)
+			timer.start();// pause timer
+		} else if (e.getSource() == aboutItem){
+			timer.stop();// pause timer
 			JOptionPane.showMessageDialog(this, infoString, "Information",
 					JOptionPane.INFORMATION_MESSAGE);
-		else if (e.getSource() == exitItem) {
+			timer.start();// pause timer
+		} else if (e.getSource() == exitItem) {
+			timer.stop();// pause timer
 			val = JOptionPane.showConfirmDialog(this, endString, "Game End",
 					JOptionPane.YES_NO_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
 			if (val == JOptionPane.YES_OPTION)
 				System.exit(0);
+			timer.start();// pause timer
 		} else if (e.getSource() == resetItem) {
 			resetGame();
 		} else if (e.getSource() == timer) {
-			timerText.setText("" + ++timeElapsed);
+			timeElapsed += 0.05;
+			timerText.setText("" + String.format("%.2f",timeElapsed));
+		}else if (e.getSource() == toptenItem) {
+			timer.stop();// pause timer
+			JOptionPane.showMessageDialog(this, scoresAsString(), "Scores",
+					JOptionPane.INFORMATION_MESSAGE);
+			timer.start();
 		}
 	}
 }

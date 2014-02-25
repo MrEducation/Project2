@@ -11,7 +11,6 @@ public class KeyHandler extends MouseAdapter {
 	@Override
 	public void mouseClicked(MouseEvent e) {//combination of press release
 		MineButton temp = (MineButton)e.getSource();
-		//System.out.println("The value under the button: " + temp.getValue());
 		if (e.getButton() == MouseEvent.BUTTON1){
 			temp.open();
 			//System.out.println("Left, clicked");
@@ -26,11 +25,11 @@ public class KeyHandler extends MouseAdapter {
 	public void mousePressed(MouseEvent e) {//combination of press release
 		MineButton temp = (MineButton)e.getSource();
 		if (e.getButton() == MouseEvent.BUTTON1){
-			System.out.println("Left, pressed");
+			//System.out.println("Left, pressed");
 			isLeftDwn= true;
 		}
 		if (e.getButton() == MouseEvent.BUTTON3){
-			System.out.println("Right, pressed");
+			//System.out.println("Right, pressed");
 			if (isLeftDwn){
 				temp.specialOpen();
 				return;
@@ -41,11 +40,11 @@ public class KeyHandler extends MouseAdapter {
 	@Override
 	public void mouseReleased(MouseEvent e) {//combination of press release
 		if (e.getButton() == MouseEvent.BUTTON1){
-			System.out.println("Left, released");
+			//System.out.println("Left, released");
 			isLeftDwn = false;
 		}
 		if (e.getButton() == MouseEvent.BUTTON3){
-			System.out.println("Right, released");
+			//System.out.println("Right, released");
 			hasClicked[0] = true;
 		}
 	}

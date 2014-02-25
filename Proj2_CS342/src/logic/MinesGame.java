@@ -11,9 +11,11 @@ public class MinesGame {
 	boolean usrGrid[][];
 	int xForBombs[], yForBombs[];
 	private final int bombValue;
+	private static boolean openingBombs;
 
 	public MinesGame(int cols, int rows, int bombs,
 			JMinesSweeperBoardPanel daGUI) {
+		openingBombs = true;
 		theGUI = daGUI;
 		numCols = cols;
 		numRows = rows;
@@ -25,6 +27,7 @@ public class MinesGame {
 		bombValue = getBombValue();// 9 allows aligned print
 		gameState = 0;
 		genBoard();
+		System.out.println(xForBombs[0] + " " + yForBombs[0]);
 		//printBoard();
 	}
 
@@ -59,33 +62,46 @@ public class MinesGame {
 			return ansGrid[x][y];
 		usrGrid[x][y] = true;
 		--numSpacesLeft;
-		theGUI.openSpot(x, y, ansGrid[x][y]);
+		theGUI.openSpot(x, y, false);
 		if (ansGrid[x][y] == 9) {
 			openBombs();
 			if (gameState == 0)
 				gameState = 2;
 			else if (gameState == 1)
 				return 9;
-			System.out.println("YOU LOSE!");
+			else {
+				System.out.println("YOU LOSE!");
+				theGUI.endGame(false);
+			}
 			return getBombValue();
 		}
 		if (ansGrid[x][y] == 0) {
 			openSurrounding(x, y);
 		}
 		if (numSpacesLeft == numBombs){
-			//theGUI.u win dialog/save high score
 			gameState = 1;
 			openBombs();
-			System.out.println("YOU WIN!");
+			 if (!openingBombs){
+				 System.out.println("YOU WIN!");
+				theGUI.endGame(true);
+			 }
 		}
 		return ansGrid[x][y];
 	}
 
 	private void openBombs() {
+		if(!openingBombs)
+			return;
+		int x = 0, y = 0;
 		for (int i = 0; i < numBombs; ++i) {
-			theGUI.openSpot(xForBombs[i], yForBombs[i],
-					ansGrid[xForBombs[i]][yForBombs[i]]);
+			x = xForBombs[i];
+			y = yForBombs[i];
+			theGUI.openSpot(x, y,
+					true);
 		}
+		openingBombs = false;
+		usrGrid[x][y] = false;
+		openSpot(x, y);
 	}
 	
 	private boolean alreadySet(int x, int y, int len){

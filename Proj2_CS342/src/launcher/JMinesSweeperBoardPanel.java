@@ -13,11 +13,13 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	private final int buttonSize;
 	private final int pixSpacing;
 	private final int pWidth, pHeight;
+	private MainFrame parent;
 	private MineButton board[][];
 	private KeyHandler mouseListener;
 	
-	public JMinesSweeperBoardPanel(){
+	public JMinesSweeperBoardPanel(MainFrame p){
 		super();
+		parent = p;
 		numRows = 10;
 		numCols = 10;
 		numBombs = 10;
@@ -51,11 +53,17 @@ public class JMinesSweeperBoardPanel extends JPanel{
 		}
 	}
 	
+	public void endGame(boolean hasWon){
+		parent.handleEndGame(hasWon);
+	}
+	
 	public boolean isFlagged(int x, int y){
 		return board[x][y].isFlaged();
 	}
 	
-	public void openSpot(int x, int y, int val){
+	public void openSpot(int x, int y, boolean bombsOpening){
+		if (bombsOpening)
+			board[x][y].bOpen();
 		board[x][y].open();
 	}
 }

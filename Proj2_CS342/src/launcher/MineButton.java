@@ -21,7 +21,7 @@ public class MineButton extends JButton{
 	private static ImageIcon qImg 	= null;
 	
 	private static MinesGame theGame;
-	private static boolean bombsRevealed = false;
+	private static boolean bombsBeingRevealed = false;
 	
 	private boolean hasSetIcon = false, isOpen = false;
 	private int imgIndex;
@@ -30,20 +30,25 @@ public class MineButton extends JButton{
 
 	public MineButton(int x, int y) {
 		super();
+		bombsBeingRevealed = false;
+		hasSetIcon = false;
+		isOpen = false;
 		imgIndex = -1;
 		xPos = x;
 		yPos = y;
-		resetFeilds();
+		bombsBeingRevealed =  false;
 		if (!imgsIsSet)
 			setImg();
 	}
 	
-	private void resetFeilds(){
-		bombsRevealed =  false;
+	public static void reset(){
+		bombsBeingRevealed = false;
 	}
-	
-	public void open(){
-		if (bombsRevealed && getValue() != 9){
+
+	public void bOpen(){
+		if (isOpen)
+			return;
+		if (bombsBeingRevealed && getValue() != 9){
 			return;
 		}
 		if (markIndex > 0){
@@ -53,6 +58,23 @@ public class MineButton extends JButton{
 		getModel().setEnabled(false);
 		isOpen = true;
 		chooseIcon(true);
+		//theGame.openSpot(xPos, yPos);
+	}
+	
+	public void open(){
+		if (isOpen)
+			return;
+		if (bombsBeingRevealed && getValue() != 9){
+			return;
+		}
+		if (markIndex > 0){
+			return;
+		}
+		getModel().setPressed(true);
+		getModel().setEnabled(false);
+		isOpen = true;
+		chooseIcon(true);
+		System.out.println("(" + xPos + ", " + yPos + ")");
 		theGame.openSpot(xPos, yPos);
 	}
 	
@@ -66,7 +88,7 @@ public class MineButton extends JButton{
 	}
 	
 	public void specialOpen(){
-		if (bombsRevealed && getValue() != 9){
+		if (bombsBeingRevealed && getValue() != 9){
 			return;
 		}
 		if (markIndex > 0){
@@ -81,7 +103,7 @@ public class MineButton extends JButton{
 	}
 	
 	public void toggle(){
-		if (bombsRevealed || isOpen)
+		if (bombsBeingRevealed || isOpen)
 			return;
 		++markIndex;
 		markIndex %= 3;
@@ -108,7 +130,7 @@ public class MineButton extends JButton{
 			imgIndex = 9 + markIndex;
 		}
 		if (imgIndex == 9)
-			bombsRevealed = true;
+			bombsBeingRevealed = true;
 		//this.setPressedIcon(mineImgList[0]);//idk why dis doesn't work
 		hasSetIcon = imgIndex > 0;
 		this.repaint();
