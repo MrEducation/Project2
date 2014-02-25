@@ -159,7 +159,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setVisible(true);
 	}
 	
-	private static void writeToFile(){//TODO Correct write to file
+	private static void writeToFile(){
 		BufferedWriter writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(scoresFile));
