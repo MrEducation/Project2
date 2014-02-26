@@ -31,8 +31,9 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenuItem aboutItem = null;
 	
 	private static JLabel flagCountText;
+	private JButton resetButton;
 	private JLabel timerText;
-	private Timer timer;
+	private static Timer timer;
 	private float timeElapsed;
 
 	private String endString = "Do you want to quit the Game?";
@@ -110,6 +111,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		new MainFrame("Mine Sweeper");
 	}
 	
+	public static void startTimer(){
+		if (!timer.isRunning())
+			timer.start();
+	}
+	
 	public static void changeFlagCount(boolean isAdding){
 		if (isAdding)
 			--numFlagToMark;
@@ -135,6 +141,21 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		flagCountText = new JLabel();
 		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
+		JPanel infoBar = new JPanel();
+		infoBar.setLayout(new FlowLayout());
+		
+		resetButton = new JButton();
+		resetButton.setText("RESET");
+		resetButton.addActionListener(this);
+		
+		timerText = new JLabel();
+		timeElapsed = 0;
+		timerText.setText("" + timeElapsed);
+		
+		infoBar.add(flagCountText);
+		infoBar.add(resetButton);
+		infoBar.add(timerText);
+		
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -144,13 +165,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
 
-		JPanel infoBar = new JPanel();
-		infoBar.setLayout(new FlowLayout());
-		timerText = new JLabel();
-		timeElapsed = 0;
-		timerText.setText("" + timeElapsed);
-		infoBar.add(flagCountText);
-		infoBar.add(timerText);
 
 		mineGUI = new JMinesSweeperBoardPanel(this);
 		this.add(infoBar, BorderLayout.NORTH);
@@ -159,13 +173,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.pack();
 		this.setResizable(false);
 		timer = new Timer(50, this);
-		timer.start();
+		timer.stop();
 	}
 
-	public void resetGame() {
+	private void resetGame() {
 		MineButton.reset();
 		this.remove(mineGUI);
+		numFlagToMark = 10;
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
 		timer.restart();
+		timer.stop();
 		timeElapsed = 0;
 		this.timerText.setText("0.00");
 		mineGUI = new JMinesSweeperBoardPanel(this);
@@ -285,7 +302,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if (val == JOptionPane.YES_OPTION)
 				System.exit(0);
 			timer.start();// pause timer
-		} else if (e.getSource() == resetItem) {
+		} else if (e.getSource() == resetItem || e.getSource() == resetButton) {
 			resetGame();
 		} else if (e.getSource() == timer) {
 			timeElapsed += 0.05;
