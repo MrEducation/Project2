@@ -70,7 +70,7 @@ public class MinesGame {
 			else if (gameState == 1)
 				return 9;
 			else {
-				System.out.println("YOU LOSE!");
+				//System.out.println("YOU LOSE!");
 				theGUI.endGame(false);
 			}
 			return getBombValue();
@@ -82,7 +82,7 @@ public class MinesGame {
 			gameState = 1;
 			openBombs();
 			 if (!openingBombs){
-				 System.out.println("YOU WIN!");
+				 //System.out.println("YOU WIN!");
 				theGUI.endGame(true);
 			 }
 		}
