@@ -21,6 +21,7 @@ public class MineButton extends JButton{
 	private static ImageIcon qImg 	= null;
 	
 	private static MinesGame theGame;
+	private static boolean hasStarted;
 	private static boolean bombsBeingRevealed = false;
 	
 	private boolean hasSetIcon = false, isOpen = false;
@@ -30,7 +31,7 @@ public class MineButton extends JButton{
 
 	public MineButton(int x, int y) {
 		super();
-		bombsBeingRevealed = false;
+		reset();
 		hasSetIcon = false;
 		isOpen = false;
 		imgIndex = -1;
@@ -42,6 +43,7 @@ public class MineButton extends JButton{
 	}
 	
 	public static void reset(){
+		hasStarted = false;
 		bombsBeingRevealed = false;
 	}
 
@@ -54,6 +56,8 @@ public class MineButton extends JButton{
 		if (markIndex > 0){
 			return;
 		}
+		if (!hasStarted)
+			MainFrame.startTimer();
 		getModel().setPressed(true);
 		getModel().setEnabled(false);
 		isOpen = true;
@@ -70,11 +74,13 @@ public class MineButton extends JButton{
 		if (markIndex > 0){
 			return;
 		}
+		if (!hasStarted)
+			MainFrame.startTimer();
 		getModel().setPressed(true);
 		getModel().setEnabled(false);
 		isOpen = true;
 		chooseIcon(true);
-		System.out.println("(" + xPos + ", " + yPos + ")");
+		//System.out.println("(" + xPos + ", " + yPos + ")");
 		theGame.openSpot(xPos, yPos);
 	}
 	
@@ -107,6 +113,10 @@ public class MineButton extends JButton{
 	public void toggle(){
 		if (bombsBeingRevealed || isOpen)
 			return;
+		if (markIndex == 0)
+			MainFrame.changeFlagCount(true);
+		else if (markIndex == 1)
+			MainFrame.changeFlagCount(false);
 		++markIndex;
 		markIndex %= 3;
 		/*

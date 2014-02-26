@@ -29,15 +29,19 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenu menuHelp = null;
 	private JMenuItem helpItem = null;
 	private JMenuItem aboutItem = null;
-
+	
+	private static JLabel flagCountText;
+	private JButton resetButton;
 	private JLabel timerText;
-	private Timer timer;
+	private static Timer timer;
 	private float timeElapsed;
 
 	private String endString = "Do you want to quit the Game?";
-	private String helpString = "Help?";
+	private String helpString = "Click into the minefield to expose free space.\n"
+			+ "Right-click to place flags";
 	private String infoString = "CS342 Project 2";
 
+	private static int numFlagToMark;
 	private static final String filename = "Scores.txt";
 	private static final File scoresFile = new File(filename);
 	private static ArrayList<Score> scores;
@@ -62,6 +66,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		public String toString(){
 			return String.format("%.2f",time) + "    " + name;
 		}
+		
 	}
 	
 	private static String scoresAsString(){
@@ -79,6 +84,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		// System.out.println(temp.getAbsolutePath());
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
+		numFlagToMark = 10;
 		try {
 			reader = new BufferedReader(new FileReader(scoresFile));
 			for (String t = reader.readLine(); t != null; t = reader.readLine()) {
@@ -104,6 +110,19 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		new MainFrame("Mine Sweeper");
 	}
+	
+	public static void startTimer(){
+		if (!timer.isRunning())
+			timer.start();
+	}
+	
+	public static void changeFlagCount(boolean isAdding){
+		if (isAdding)
+			--numFlagToMark;
+		else ++numFlagToMark;
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
+			
+	}
 
 	public MainFrame(String title) {
 		super(title);
@@ -120,6 +139,23 @@ public class MainFrame extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 		}
+		flagCountText = new JLabel();
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
+		JPanel infoBar = new JPanel();
+		infoBar.setLayout(new FlowLayout());
+		
+		resetButton = new JButton();
+		resetButton.setText("RESET");
+		resetButton.addActionListener(this);
+		
+		timerText = new JLabel();
+		timeElapsed = 0;
+		timerText.setText("" + timeElapsed);
+		
+		infoBar.add(flagCountText);
+		infoBar.add(resetButton);
+		infoBar.add(timerText);
+		
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -129,12 +165,6 @@ public class MainFrame extends JFrame implements ActionListener {
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
 
-		JPanel infoBar = new JPanel();
-		infoBar.setLayout(new FlowLayout());
-		timerText = new JLabel();
-		timeElapsed = 0;
-		timerText.setText("" + timeElapsed);
-		infoBar.add(timerText);
 
 		mineGUI = new JMinesSweeperBoardPanel(this);
 		this.add(infoBar, BorderLayout.NORTH);
@@ -143,13 +173,16 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.pack();
 		this.setResizable(false);
 		timer = new Timer(50, this);
-		timer.start();
+		timer.stop();
 	}
 
-	public void resetGame() {
+	private void resetGame() {
 		MineButton.reset();
 		this.remove(mineGUI);
+		numFlagToMark = 10;
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
 		timer.restart();
+		timer.stop();
 		timeElapsed = 0;
 		this.timerText.setText("0.00");
 		mineGUI = new JMinesSweeperBoardPanel(this);
@@ -181,7 +214,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if (timeElapsed < scores.get(9).time)
 				name = JOptionPane.showInputDialog(this, "New High: " +
 						String.format("%.2f",timeElapsed) + ". What's your name?");
-			if (name != null){
+			if (name != null && !name.isEmpty()){
 				Score temp = new Score(timeElapsed, name);
 				int i = 9;
 				for (; i >= 0 && temp.compareTo(scores.get(i)) < 0; --i);
@@ -249,6 +282,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		int val;
+		
+		
 		if (e.getSource() == helpItem){
 			timer.stop();// pause timer
 			JOptionPane.showMessageDialog(this, helpString, "Help",
@@ -267,7 +302,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if (val == JOptionPane.YES_OPTION)
 				System.exit(0);
 			timer.start();// pause timer
-		} else if (e.getSource() == resetItem) {
+		} else if (e.getSource() == resetItem || e.getSource() == resetButton) {
 			resetGame();
 		} else if (e.getSource() == timer) {
 			timeElapsed += 0.05;
