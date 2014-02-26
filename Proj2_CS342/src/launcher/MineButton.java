@@ -74,7 +74,7 @@ public class MineButton extends JButton{
 		getModel().setEnabled(false);
 		isOpen = true;
 		chooseIcon(true);
-		System.out.println("(" + xPos + ", " + yPos + ")");
+		//System.out.println("(" + xPos + ", " + yPos + ")");
 		theGame.openSpot(xPos, yPos);
 	}
 	

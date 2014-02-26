@@ -27,7 +27,7 @@ public class MinesGame {
 		bombValue = getBombValue();// 9 allows aligned print
 		gameState = 0;
 		genBoard();
-		System.out.println(xForBombs[0] + " " + yForBombs[0]);
+		//System.out.println(xForBombs[0] + " " + yForBombs[0]);
 		//printBoard();
 	}
 
