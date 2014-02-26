@@ -187,7 +187,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			if (timeElapsed < scores.get(9).time)
 				name = JOptionPane.showInputDialog(this, "New High: " +
 						String.format("%.2f",timeElapsed) + ". What's your name?");
-			if (name != null){
+			if (name != null && !name.isEmpty()){
 				Score temp = new Score(timeElapsed, name);
 				int i = 9;
 				for (; i >= 0 && temp.compareTo(scores.get(i)) < 0; --i);
