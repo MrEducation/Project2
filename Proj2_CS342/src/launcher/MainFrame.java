@@ -29,13 +29,14 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenu menuHelp = null;
 	private JMenuItem helpItem = null;
 	private JMenuItem aboutItem = null;
-
+	
 	private JLabel timerText;
 	private Timer timer;
 	private float timeElapsed;
 
 	private String endString = "Do you want to quit the Game?";
-	private String helpString = "Help?";
+	private String helpString = "Click into the minefield to expose free space.\n"
+			+ "Right-click to place flags";
 	private String infoString = "CS342 Project 2";
 
 	private static final String filename = "Scores.txt";
@@ -62,6 +63,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		public String toString(){
 			return String.format("%.2f",time) + "    " + name;
 		}
+		
 	}
 	
 	private static String scoresAsString(){
@@ -128,6 +130,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		URL temp = MainFrame.class.getClassLoader().getResource("images/gnomine_1.png");// top left image
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
+		
+
+		
+		
 
 		JPanel infoBar = new JPanel();
 		infoBar.setLayout(new FlowLayout());
@@ -249,6 +255,8 @@ public class MainFrame extends JFrame implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		int val;
+		
+		
 		if (e.getSource() == helpItem){
 			timer.stop();// pause timer
 			JOptionPane.showMessageDialog(this, helpString, "Help",
