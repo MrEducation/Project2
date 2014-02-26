@@ -10,10 +10,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-import logic.MinesGame;
-
 /**************************************************************
-//TODO Reset button and the number of bombs left in top panel 
+//TODO Need to comment EVERYTHING
 ***************************************************************/
 
 public class MainFrame extends JFrame implements ActionListener {
