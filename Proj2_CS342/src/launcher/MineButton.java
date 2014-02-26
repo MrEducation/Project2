@@ -107,6 +107,10 @@ public class MineButton extends JButton{
 	public void toggle(){
 		if (bombsBeingRevealed || isOpen)
 			return;
+		if (markIndex == 0)
+			MainFrame.changeFlagCount(true);
+		else if (markIndex == 1)
+			MainFrame.changeFlagCount(false);
 		++markIndex;
 		markIndex %= 3;
 		/*

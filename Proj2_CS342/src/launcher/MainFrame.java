@@ -30,6 +30,7 @@ public class MainFrame extends JFrame implements ActionListener {
 	private JMenuItem helpItem = null;
 	private JMenuItem aboutItem = null;
 	
+	private static JLabel flagCountText;
 	private JLabel timerText;
 	private Timer timer;
 	private float timeElapsed;
@@ -39,6 +40,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			+ "Right-click to place flags";
 	private String infoString = "CS342 Project 2";
 
+	private static int numFlagToMark;
 	private static final String filename = "Scores.txt";
 	private static final File scoresFile = new File(filename);
 	private static ArrayList<Score> scores;
@@ -81,6 +83,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		// System.out.println(temp.getAbsolutePath());
 		BufferedReader reader = null;
 		BufferedWriter writer = null;
+		numFlagToMark = 10;
 		try {
 			reader = new BufferedReader(new FileReader(scoresFile));
 			for (String t = reader.readLine(); t != null; t = reader.readLine()) {
@@ -106,6 +109,14 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 		new MainFrame("Mine Sweeper");
 	}
+	
+	public static void changeFlagCount(boolean isAdding){
+		if (isAdding)
+			--numFlagToMark;
+		else ++numFlagToMark;
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
+			
+	}
 
 	public MainFrame(String title) {
 		super(title);
@@ -122,6 +133,8 @@ public class MainFrame extends JFrame implements ActionListener {
 				e2.printStackTrace();
 			}
 		}
+		flagCountText = new JLabel();
+		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
 		initMenu();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -130,16 +143,13 @@ public class MainFrame extends JFrame implements ActionListener {
 		URL temp = MainFrame.class.getClassLoader().getResource("images/gnomine_1.png");// top left image
 		Image img = Toolkit.getDefaultToolkit().getImage(temp);
 		setIconImage(img);
-		
-
-		
-		
 
 		JPanel infoBar = new JPanel();
 		infoBar.setLayout(new FlowLayout());
 		timerText = new JLabel();
 		timeElapsed = 0;
 		timerText.setText("" + timeElapsed);
+		infoBar.add(flagCountText);
 		infoBar.add(timerText);
 
 		mineGUI = new JMinesSweeperBoardPanel(this);
