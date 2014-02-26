@@ -1,5 +1,9 @@
 package launcher;
 
+/**************************************************************
+CS 342, Project 2: Minesweeper
+Team: Shanon Mathai, Bora Park, Dominick Rauba
+***************************************************************/
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,10 +14,13 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
-/**************************************************************
-//TODO Need to comment EVERYTHING
-***************************************************************/
 
+/**
+ * Handles the JFrame for the MineSweeper game and
+ * creates the JMinesSweeperBoardPanel, JMenu
+ * and handles events with general UI.
+ *
+ */
 public class MainFrame extends JFrame implements ActionListener {
 	private JMinesSweeperBoardPanel mineGUI;
 
@@ -44,6 +51,12 @@ public class MainFrame extends JFrame implements ActionListener {
 	private static final File scoresFile = new File(filename);
 	private static ArrayList<Score> scores;
 
+	/**
+	 * Essential a class to represent
+	 * tuples of scores and names, to be used to
+	 * keeps track of scores during runtime
+	 *
+	 */
 	private static class Score {
 		public String name;// won't be used outside MainFrame class
 		public float time;// won't be used outside MainFrame class
