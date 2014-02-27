@@ -141,7 +141,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		new MainFrame("Mine Sweeper");
+		new MainFrame("Mine Sweeper").pack();
 	}
 	
 	/**
