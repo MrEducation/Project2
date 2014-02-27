@@ -66,6 +66,12 @@ public class MainFrame extends JFrame implements ActionListener {
 			time = t;
 		}
 
+		/** Easily compare to other Score
+		 * 	object
+		 * 
+		 * @param other To be compared against
+		 * @return -1 if this is lesser, 1 if greater, 0 if equal
+		 */
 		public int compareTo(Score other) {
 			if (this.time < other.time)
 				return -1;
@@ -74,12 +80,24 @@ public class MainFrame extends JFrame implements ActionListener {
 			else return 0;
 		}
 		
+		/**
+		 * String representation limited to
+		 * two decimal positions.
+		 * Eg.
+		 * 2.4564 => 2.45
+		 */
 		public String toString(){
 			return String.format("%.2f",time) + "    " + name;
 		}
 		
 	}
 	
+	/**
+	 * Generates a single string (with newlines)
+	 * to represent all scores
+	 * 
+	 * @return Full string
+	 */
 	private static String scoresAsString(){
 		if (scores == null)
 			return "";
@@ -90,6 +108,10 @@ public class MainFrame extends JFrame implements ActionListener {
 		return temp;
 	}
 
+	/**
+	 * Launches the entire program
+	 * @param args (ignored)
+	 */
 	public static void main(String args[]) {
 		scores = new ArrayList<Score>();
 		// System.out.println(temp.getAbsolutePath());
@@ -122,11 +144,20 @@ public class MainFrame extends JFrame implements ActionListener {
 		new MainFrame("Mine Sweeper");
 	}
 	
+	/**
+	 * Allows external class to start timer
+	 * if it is not running
+	 */
 	public static void startTimer(){
 		if (!timer.isRunning())
 			timer.start();
 	}
 	
+	/**
+	 * Updated the "Bombs Left" text
+	 * 
+	 * @param isAdding Whether flag is being placed/taken out
+	 */
 	public static void changeFlagCount(boolean isAdding){
 		if (isAdding)
 			--numFlagToMark;
@@ -135,6 +166,11 @@ public class MainFrame extends JFrame implements ActionListener {
 			
 	}
 
+	/**
+	 * JFrame that instantiates the JMinesSweeperPanel
+	 * 
+	 * @param title Name of the frame
+	 */
 	public MainFrame(String title) {
 		super(title);
 		this.setLayout(new BorderLayout());
@@ -151,7 +187,9 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 		}
 		flagCountText = new JLabel();
-		flagCountText.setText("Bombs Left: " + numFlagToMark + "      ");
+		flagCountText.setPreferredSize(new Dimension(200, 30));
+		flagCountText.setHorizontalAlignment(SwingConstants.CENTER);
+		flagCountText.setText("Bombs Left: " + numFlagToMark);
 		JPanel infoBar = new JPanel();
 		infoBar.setLayout(new FlowLayout());
 		
@@ -160,9 +198,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		resetButton.addActionListener(this);
 		
 		timerText = new JLabel();
+		timerText.setPreferredSize(new Dimension(200, 30));
+		timerText.setHorizontalAlignment(SwingConstants.CENTER);
 		timeElapsed = 0;
 		timerText.setText("" + timeElapsed);
-		
+
 		infoBar.add(flagCountText);
 		infoBar.add(resetButton);
 		infoBar.add(timerText);
@@ -187,6 +227,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		timer.stop();
 	}
 
+	/**
+	 * Resets certain (static) components of the game
+	 * and creating a renewed instance of the 
+	 * JMinesSweeperPanel
+	 */
 	private void resetGame() {
 		MineButton.reset();
 		this.remove(mineGUI);
@@ -203,6 +248,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setVisible(true);
 	}
 	
+	/**
+	 * Write to the external file
+	 */
 	private static void writeToFile(){
 		BufferedWriter writer;
 		try {
@@ -216,8 +264,12 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 	
-	public void handleEndGame(boolean hasWon){
-		
+	/**
+	 * Handles the lose/win screen
+	 * 
+	 * @param hasWon Whether player won
+	 */
+	public void handleEndGame(boolean hasWon){		
 		int val;
 		String name = null;
 		if (hasWon){
@@ -259,7 +311,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		}
 	}
 
-	// member method
+	/**
+	 * Handles the starting of the menu
+	 */
 	public void initMenu() {
 		menuBar = new JMenuBar();
 		menuGame = new JMenu("Game");
@@ -291,6 +345,9 @@ public class MainFrame extends JFrame implements ActionListener {
 		this.setJMenuBar(menuBar);
 	}
 
+	/**
+	 * Handles all action events
+	 */
 	public void actionPerformed(ActionEvent e) {
 		int val;
 		
