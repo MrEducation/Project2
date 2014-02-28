@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 
 import logic.MinesGame;
 
+/**
+ * Handles the GUI for the MinesSweeper game
+ *
+ */
 public class JMinesSweeperBoardPanel extends JPanel{
 	private final int numRows, numCols;
 	private final int numBombs;
@@ -17,6 +21,11 @@ public class JMinesSweeperBoardPanel extends JPanel{
 	private MineButton board[][];
 	private KeyHandler mouseListener;
 	
+	/**
+	 * Initialize the references and the game logic 
+	 * 
+	 * @param p Parent MainFrame
+	 */
 	public JMinesSweeperBoardPanel(MainFrame p){
 		super();
 		parent = p;
@@ -35,8 +44,11 @@ public class JMinesSweeperBoardPanel extends JPanel{
 		addSquares();
 	}
 	
+	/**
+	 * Create the array of buttons
+	 */
 	private void addSquares(){
-		MineButton aButton;// deriving instance later?
+		MineButton aButton;
 		int xLoc, yLoc;
 		for(int y = 0; y < numRows; y++){
 			yLoc = pixSpacing + (buttonSize + pixSpacing) * y;
@@ -53,17 +65,38 @@ public class JMinesSweeperBoardPanel extends JPanel{
 		}
 	}
 	
+	/**
+	 * Used to pipe the end game phase to
+	 * the parent
+	 * @param hasWon True if won, false otherwise
+	 */
 	public void endGame(boolean hasWon){
 		parent.handleEndGame(hasWon);
 	}
 	
+	/**
+	 * Returns whether the spot is flagged right now
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean isFlagged(int x, int y){
 		return board[x][y].isFlaged();
 	}
 	
+	/**
+	 * Handles the opening of the of
+	 * the logic board from the logic
+	 * to GUI side
+	 * 
+	 * @param x
+	 * @param y
+	 * @param bombsOpening
+	 */
 	public void openSpot(int x, int y, boolean bombsOpening){
 		if (bombsOpening)
-			board[x][y].bOpen();
+			board[x][y].bOpen();//no else allows the end in case it didn't catch the end
 		board[x][y].open();
 	}
 }

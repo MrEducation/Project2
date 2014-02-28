@@ -3,6 +3,11 @@ package launcher;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Routes the mouse click events to the 
+ * appropriate methods
+ *
+ */
 public class KeyHandler extends MouseAdapter {
 	private boolean isLeftDwn = false;// to use for two mouse press together
 	private boolean hasClicked[] = new boolean[2];// to be reset at check
@@ -31,7 +36,7 @@ public class KeyHandler extends MouseAdapter {
 		if (e.getButton() == MouseEvent.BUTTON3){
 			//System.out.println("Right, pressed");
 			if (isLeftDwn){
-				temp.specialOpen();
+				temp.specialOpen();//open for number with flags only
 				return;
 			}
 		}

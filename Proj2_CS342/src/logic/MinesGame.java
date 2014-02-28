@@ -4,6 +4,10 @@ import java.util.Random;
 
 import launcher.JMinesSweeperBoardPanel;
 
+/**
+ * Game logic of the Minesweeper game
+ *
+ */
 public class MinesGame {
 	private JMinesSweeperBoardPanel theGUI;
 	private int numCols, numRows, numBombs, numSpacesLeft;
@@ -13,6 +17,14 @@ public class MinesGame {
 	private final int bombValue;
 	private static boolean openingBombs;
 
+	/**
+	 * Create the logic for the MinesSweeper game 
+	 * 
+	 * @param cols Columns for the board
+	 * @param rows Rows for the board
+	 * @param bombs Number of bombs in the board
+	 * @param daGUI GUI attached to this game
+	 */
 	public MinesGame(int cols, int rows, int bombs,
 			JMinesSweeperBoardPanel daGUI) {
 		openingBombs = true;
@@ -89,6 +101,9 @@ public class MinesGame {
 		return ansGrid[x][y];
 	}
 
+	/**
+	 * Opens all the bombs
+	 */
 	private void openBombs() {
 		if(!openingBombs)
 			return;
@@ -104,6 +119,14 @@ public class MinesGame {
 		openSpot(x, y);
 	}
 	
+	/**
+	 * Used to check if bomb was already placed at this location
+	 * 
+	 * @param x X coordinate for the to-be-place bomb 
+	 * @param y Y coordinate for the to-be-place bomb
+	 * @param len Current of the length
+	 * @return
+	 */
 	private boolean alreadySet(int x, int y, int len){
 		for (int i = 0; i < len; ++i){
 			if (xForBombs[i] == x && yForBombs[i] == y)
@@ -112,6 +135,9 @@ public class MinesGame {
 		return false;
 	}
 
+	/**
+	 * Generate board for the gameplay
+	 */
 	private void genBoard() {
 		xForBombs = new int[numBombs];
 		yForBombs = new int[numBombs];
@@ -134,6 +160,10 @@ public class MinesGame {
 		}
 	}
 
+	/**
+	 * Prints the answers board to the
+	 * console
+	 */
 	private void printBoard() {
 		for (int y = 0; y < numRows; ++y) {
 			for (int x = 0; x < numCols; ++x) {
@@ -143,6 +173,13 @@ public class MinesGame {
 		}
 	}
 
+	/**
+	 * Checks for out of bounds coordinates
+	 * 
+	 * @param x X coordinate of the point
+	 * @param y Y coordinate of the point
+	 * @return True if valid, false otherwise
+	 */
 	private boolean isInbounds(int x, int y) {
 		if (x < 0 || y < 0)
 			return false;
@@ -151,6 +188,13 @@ public class MinesGame {
 		return true;
 	}
 	
+	/**
+	 * Returns the number of flags around the point
+	 * 
+	 * @param x X coordinate of the point
+	 * @param y Y coordinate of the point
+	 * @return Number of flags
+	 */
 	public int getNumFlagAround(int x, int y){
 		int total = 0;
 		if (isInbounds(x - 1, y - 1)) {// top left
@@ -181,6 +225,11 @@ public class MinesGame {
 		return total;
 	}
 
+	/**
+	 * Handles the opening of the point specified
+	 * @param x X coordinate of the point
+	 * @param y Y coordinate of the point
+	 */
 	public void openSurrounding(int x, int y) {
 		// checks out of bounds
 		if (isInbounds(x - 1, y - 1) && !usrGrid[x - 1][y - 1] && !theGUI.isFlagged(x - 1, y - 1)) {// top left
@@ -209,6 +258,12 @@ public class MinesGame {
 		}
 	}
 
+	/**
+	 * Used to initialize the area around the 
+	 * bomb
+	 * @param x X coordinate of bomb
+	 * @param y Y coordinate of bomb
+	 */
 	private void setSurrounding(int x, int y) {
 		// checks out of bounds
 		if (isInbounds(x - 1, y - 1) && !usrGrid[x][y]) {// top left

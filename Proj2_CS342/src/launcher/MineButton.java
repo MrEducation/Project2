@@ -9,9 +9,13 @@ import javax.swing.JButton;
 
 import logic.MinesGame;
 
+/**
+ * Initialize the tile used in the 
+ * JMinesweeperBoardPanel
+ *
+ */
 public class MineButton extends JButton{
 
-	/*imgIcon field*/
 	private static Image allImgs[] = new Image[12];
 	
 	private static boolean imgsIsSet = false;
@@ -29,6 +33,13 @@ public class MineButton extends JButton{
 	private int markIndex = 0;// 0  = blank, 1 = flag, 2 = ?
 	private final int xPos, yPos;
 
+	/**
+	 * Create a button who know it's only position
+	 * on the board
+	 * 
+	 * @param x Row coordinate
+	 * @param y Column coordinate
+	 */
 	public MineButton(int x, int y) {
 		super();
 		reset();
@@ -42,11 +53,17 @@ public class MineButton extends JButton{
 			setImg();
 	}
 	
+	/**
+	 * Resets the static fields
+	 */
 	public static void reset(){
 		hasStarted = false;
 		bombsBeingRevealed = false;
 	}
 
+	/**
+	 * Open the bombs in end game phase
+	 */
 	public void bOpen(){
 		if (isOpen)
 			return;
@@ -65,6 +82,10 @@ public class MineButton extends JButton{
 		//theGame.openSpot(xPos, yPos);
 	}
 	
+	/**
+	 * Standard opening of the board
+	 * at this tile
+	 */
 	public void open(){
 		if (isOpen)
 			return;
@@ -84,6 +105,11 @@ public class MineButton extends JButton{
 		theGame.openSpot(xPos, yPos);
 	}
 	
+	/**
+	 * Checks to see if the surrounding has the same
+	 * number of flags as the number at this tile
+	 * @return
+	 */
 	private boolean canSpecialOpen(){
 		int i = getValue() - theGame.getNumFlagAround(xPos, yPos);
 		return i == 0;
@@ -93,6 +119,10 @@ public class MineButton extends JButton{
 		return markIndex == 1;
 	}
 	
+	/**
+	 * Handles the simultaneous left-right click
+	 * event
+	 */
 	public void specialOpen(){
 		if (!isOpen)
 			return;
@@ -110,6 +140,9 @@ public class MineButton extends JButton{
 			theGame.openSurrounding(xPos, yPos);
 	}
 	
+	/**
+	 * Handle the right click event
+	 */
 	public void toggle(){
 		if (bombsBeingRevealed || isOpen)
 			return;
@@ -129,10 +162,20 @@ public class MineButton extends JButton{
 		chooseIcon(false);
 	}
 
+	/**
+	 * Used to attach the button to the 
+	 * game logic
+	 * @param temp
+	 */
 	public static void setGame(MinesGame temp) {
 		theGame = temp;
 	}
 	
+	/**
+	 * 
+	 * @param isOpening It being called from a function 
+	 * 					in order to open the button
+	 */
 	public void chooseIcon(boolean isOpening){// should be called on click (or pressed)
 		if (markIndex == 0 && isOpening)
 			imgIndex = getValue();// for now
@@ -149,6 +192,12 @@ public class MineButton extends JButton{
 		//hasSetIcon = false;
 	}
 	
+	/**
+	 * Used to draw the icon on top of
+	 * the button 
+	 * 
+	 * @see Graphics
+	 */
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
@@ -160,11 +209,18 @@ public class MineButton extends JButton{
 			g.drawImage(allImgs[imgIndex], x, y, this);
 	}
 	
+	/**
+	 * Get the value form the game logic about the
+	 * value under the button
+	 * @return The value
+	 */
 	public int getValue() {
 		return theGame.getValue(xPos, yPos);
 	}	
 	
-	/*image loading method*/
+	/**
+	 * Used to load the images from resources
+	 */
 	private static void setImg(){
 		ClassLoader temp =	MineButton.class.getClassLoader();
 		numImgList = new ImageIcon[8];
